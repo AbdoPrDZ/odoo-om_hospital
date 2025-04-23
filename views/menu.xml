@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <menuitem id="hospital_menu_root"
+    name="OM Hospital"
+    sequence="10"
+    web_icon="om_hospital,static/description/icon.png" />
+
+  <menuitem id="hospital_patient_root"
+    name="Paitients"
+    sequence="20"
+    parent="hospital_menu_root" />
+</odoo>

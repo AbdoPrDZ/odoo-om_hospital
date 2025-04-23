@@ -1,0 +1,61 @@
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Distribution / packaging
+*.egg
+*.egg-info/
+dist/
+build/
+*.tar.gz
+
+# Odoo specific
+*.log
+*.swp
+*.tmp
+*.bak
+*.orig
+*.rej
+*.sublime-workspace
+*.sublime-project
+*.DS_Store
+
+# Python virtual environment
+venv/
+.env/
+
+# IDE specific
+.idea/
+.vscode/
+
+# Test and coverage reports
+.coverage
+.tox/
+nosetests.xml
+test-results/
+htmlcov/
+*.cover
+*.coverage.*
+
+# Odoo module specific
+*.pot
+*.mo
+*.pyc
+*.pyo
+*.pyd
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.bak
+*.swp
+*.tmp
+*.log
+*.orig
+*.rej
+*.sublime-workspace
+*.sublime-project
+*.DS_Store
