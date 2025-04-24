@@ -309,6 +309,10 @@
   </odoo>
   ```
   - (Optional) Make sure to add [module icon](#add-module-icon) module files
+
+## Create Mode View Action
+
+- [Create root menu](#create-root-menu).
 - Create `views/model_view.xml` view file:
   ```bash
   my_module/
@@ -363,10 +367,173 @@
     </record>
   </odoo>
   ```
-- Create Submenu with model view action in `views/model_view.xml` related to root menu with view action.
+- [Create the submenu](#create-submenu-for-model-view-action) for this model view action.
+
+## Create Submenu for Model view action
+
+- Create the [model view action](#create-mode-view-action).
+
+- Create Submenu in `views/model_view.xml` related to [root menu](#create-root-menu) with view action.
   ```xml
   <?xml version="1.0" encoding="UTF-8"?>
   <odoo>
+    <!-- Model View Action -->
+    <record id="action_model_view" model="ir.actions.act_window">
+      <field name="name">First Model</field>
+      <field name="res_model">my_module.first_model</field>
+      <field name="view_mode">tree</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+          Click to create a new model item.
+        </p>
+        <p class="oe_view_nocontent_help">
+          You can manage your model items here.
+        </p>
+      </field>
+    </record>
+    <!-- Model View Submenu -->
+    <menuitem id="menu_my_module_root"
+        name="My Module"
+        sequence="20"
+        parent="menu_my_module_root"
+        action="action_model_view"/>
+  </odoo>
+  ```
+  - Note: Make sure to put the action before the submenu.
+
+## Create a custom tree view
+
+- Create the [model view action](#create-mode-view-action).
+- Make sure to add `tree` yo `view_mode` field.
+- Create the `<record>` tag and set view `id`, `name`, `model` and display `fileds`.
+
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <odoo>
+    <!-- Tree View -->
+    <record id="view_first_model_tree">
+      <field name="name">my_module.first_model.tree</field>
+      <field name="model">mymodule.first_model</field>
+      <field name="arch" type="xml">
+        <tree>
+          <!-- Display Fields -->
+          <field name="field1"/>
+          <field name="field2"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Model View Action -->
+    <record id="action_model_view" model="ir.actions.act_window">
+      <field name="name">First Model</field>
+      <field name="res_model">my_module.first_model</field>
+      <field name="view_mode">tree</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+          Click to create a new model item.
+        </p>
+        <p class="oe_view_nocontent_help">
+          You can manage your model items here.
+        </p>
+      </field>
+    </record>
+    <!-- Model View Submenu -->
+    <menuitem id="menu_my_module_root"
+        name="My Module"
+        sequence="20"
+        parent="menu_my_module_root"
+        action="action_model_view"/>
+  </odoo>
+  ```
+
+## Create a custom kanban view
+
+- Create the [model view action](#create-mode-view-action).
+- Make sure to add `tree` yo `view_mode` field.
+- Create the `<record>` tag and set view `id`, `name`, `model` and display `fileds`.
+
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <odoo>
+    <!-- Tree View -->
+    <record id="view_first_model_tree">
+      <field name="name">my_module.first_model.tree</field>
+      <field name="model">mymodule.first_model</field>
+      <field name="arch" type="xml">
+        <tree>
+          <!-- Display Fields -->
+          <field name="field1"/>
+          <field name="field2"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Model View Action -->
+    <record id="action_model_view" model="ir.actions.act_window">
+      <field name="name">First Model</field>
+      <field name="res_model">my_module.first_model</field>
+      <field name="view_mode">tree</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+          Click to create a new model item.
+        </p>
+        <p class="oe_view_nocontent_help">
+          You can manage your model items here.
+        </p>
+      </field>
+    </record>
+    <!-- Model View Submenu -->
+    <menuitem id="menu_my_module_root"
+        name="My Module"
+        sequence="20"
+        parent="menu_my_module_root"
+        action="action_model_view"/>
+  </odoo>
+  ```
+
+## Create a custom form view
+
+- Create the [model view action](#create-mode-view-action).
+- Make sure to add `form` yo `view_mode` field.
+- Create the `<record>` tag and set view `id`, `name`, `model` and display `fileds`.
+
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <odoo>
+    <!-- Tree View -->
+    <record id="view_first_model_tree">
+      <field name="name">my_module.first_model.tree</field>
+      <field name="model">mymodule.first_model</field>
+      <field name="arch" type="xml">
+        <tree>
+          <!-- Display Fields -->
+          <field name="field1"/>
+          <field name="field2"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Form View -->
+    <record>
+      <field name="name">my_module.first_model.form</field>
+      <field name="model">mymodule.first_model</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="field1"/>
+                <field name="field2"/>
+              </group>
+              <group>
+                <field name="field3"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
     <!-- Model View Action -->
     <record id="action_model_view" model="ir.actions.act_window">
       <field name="name">First Model</field>
@@ -385,7 +552,40 @@
     <menuitem id="menu_my_module_root"
         name="My Module"
         sequence="20"
+        parent="menu_my_module_root"
         action="action_model_view"/>
   </odoo>
   ```
-  - Note: Make sure to set the action before the submenu.
+
+## Hide element
+
+```xml
+<element-tag invisible="[('field', '=', 'value')]">
+<element-tag invisible="[('field', '&gt;', 'value')]">
+<element-tag invisible="[('field', '&lt;', 'value')]">
+```
+
+## Confirm before submitting
+
+```xml
+  <button id="my_button" type="object" name="my_function" confirm="Confirmation Message"/>
+```
+
+## Create a sequence
+
+- Create `my_module/data/ir_sequence_data.xml` file and add it to `my_module/__manifest__.py`.
+- Create a sequence in `<record>` tag.
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <odoo>
+    <data>
+      <record id="seq_my_module_first_model" model="ir.sequence">
+        <field name="name">My Module First Model</field>
+        <field name="code">my_module.seq_first_model</field>
+        <field name="prefix">FM</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+      </record>
+    </data>
+  </odoo>
+  ```

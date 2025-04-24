@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="action_hospital_patient_female" model="ir.actions.act_window">
+    <field name="name">Female patients</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">om_hospital.patient</field>
+    <field name="view_mode">tree,form,kanban</field>
+    <field name="domain">[('gender', '=', 'female')]</field>
+    <field name="context">{
+      'default_gender': 'female',
+      'hide_gender': 1,
+      'search_default_partner': 1,
+      }</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to create a new female patient.
+      </p>
+      <p class="oe_view_nocontent_help">
+        You can manage your female patients here.
+      </p>
+    </field>
+  </record>
+
+  <menuitem id="hospital_female"
+    name="Female patients"
+    sequence="30"
+    parent="hospital_patient_root"
+    action="action_hospital_patient_female" />
+</odoo>

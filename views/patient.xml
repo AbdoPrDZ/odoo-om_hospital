@@ -6,17 +6,35 @@
     <field name="arch" type="xml">
       <form>
         <header>
-          <field name="state" widget="statusbar" options="{ 'clickable': 1 }"
-            statusbar_visible="draft,confirmed,done" />
+          <button id="button_confirm" class="btn-primary" string="Confirm"
+            type="object" name="action_confirm" states="draft"
+            confirm="Are you sure you want to confirm this patient?" />
+          <button id="button_done" class="btn-success" string="Mark as done"
+            type="object" name="action_done" states="confirmed"
+            confirm="Are you sure you want to mark this patient as done?" />
+          <button id="button_cancel" class="btn-danger" string="Cancel"
+            type="object" name="action_cancel" states="draft,confirmed,done"
+            confirm="Are you sure you want to cancel this patient" />
+          <button id="button_restore" class="btn-default" string="Restore as draft"
+            type="object" name="action_restore" states="canceled"
+            confirm="Are you sure you want to restore this patient" />
+          <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" />
         </header>
         <sheet>
+          <div class="oe_title">
+            <h1>
+              <field name="reference" />
+            </h1>
+          </div>
           <group>
             <group>
-              <field name="name" />
+              <field name="partner_id" />
               <field name="age" />
-              <field name="gender" />
+              <field name="gender" invisible="context.get('hide_gender', True)" />
+              <field name="appointments_count" />
             </group>
             <group>
+              <field name="responsible_id" />
               <field name="note" />
             </group>
           </group>
@@ -30,36 +48,44 @@
     </field>
   </record>
 
-  <record id="view_patient_tree" model="ir.ui.view">
-    <field name="name">om_hospital.patient.tree</field>
-    <field name="model">om_hospital.patient</field>
-    <field name="arch" type="xml">
-      <tree>
-        <field name="name" />
-        <field name="age" />
-        <field name="gender" />
-        <field name="state" />
-      </tree>
-    </field>
-  </record>
-
   <record id="view_patient_search" model="ir.ui.view">
     <field name="name">om_hospital.patient.search</field>
     <field name="model">om_hospital.patient</field>
     <field name="arch" type="xml">
       <search string="Patients">
-        <field name="name" string="Name" />
+        <field name="partner_id" string="Partner" />
+        <field name="responsible_id" string="Responsible" />
         <field name="note" string="Description" />
         <separator />
         <filter string="Male" name="male" domain="[('gender', '=', 'male')]" />
         <filter string="Female" name="female" domain="[('gender', '=', 'female')]" />
-        <filter string="Young" name="young" domain="[('age', '&lt;', 18)]" />
-        <filter string="Adult" name="adult" domain="[('age', '&gt;=', 18)]" />
         <filter string="Senior" name="senior" domain="[('age', '&gt;=', 60)]" />
+        <filter string="Adult" name="adult" domain="[('age', '&gt;=', 18)]" />
+        <filter string="Young" name="young" domain="[('age', '&lt;', 18)]" />
+        <filter string="Kids" name="Kids" domain="[('age', '&lt;', 13)]" />
+        <filter string="Baby" name="baby" domain="[('age', '&lt;', 1)]" />
         <group expand="1" string="Group By">
           <filter string="Gender" name="gender" context="{ 'group_by': 'gender' }" />
+          <filter string="Responsible" name="responsible" context="{ 'group_by': 'responsible_id' }" />
+          <filter string="Partner" name="partner" context="{ 'group_by': 'partner_id' }" />
         </group>
       </search>
+    </field>
+  </record>
+
+  <record id="view_patient_tree" model="ir.ui.view">
+    <field name="name">om_hospital.patient.tree</field>
+    <field name="model">om_hospital.patient</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="reference" />
+        <field name="partner_id" />
+        <field name="age" />
+        <field name="gender" />
+        <field name="responsible_id" />
+        <field name="state" />
+        <field name="appointments_count" />
+      </tree>
     </field>
   </record>
 
@@ -69,22 +95,29 @@
     <field name="arch" type="xml">
       <kanban class="o_kanban_mobile">
         <field name="id" />
-        <field name="name" />
+        <field name="reference" />
+        <field name="partner_id" />
         <field name="age" />
         <field name="gender" />
         <field name="note" />
+        <field name="responsible_id" />
         <field name="state" />
         <templates>
           <t t-name="kanban-box">
             <div t-attf-class="oe_kanban_global_click">
               <div class="oe_kanban_details">
                 <ul>
-                  <li> Name: <field name="name" />
+                  <li> Reference: <field name="reference" />
+                  </li>
+                  <li> Partner: <field name="partner_id" />
                   </li>
                   <li> Age: <field name="age" />
                   </li>
                   <li> Gender: <field name="gender" />
                   </li>
+                  <t t-if="record.responsible_id.raw_value">
+                    <li>Responsible: <span t-field="record.responsible_id" /></li>
+                  </t>
                   <li> Status: <field name="state" />
                   </li>
                 </ul>
@@ -98,8 +131,13 @@
 
   <record id="action_hospital_patient" model="ir.actions.act_window">
     <field name="name">Patients</field>
+    <field name="type">ir.actions.act_window</field>
     <field name="res_model">om_hospital.patient</field>
     <field name="view_mode">tree,form,kanban</field>
+    <field name="context">{
+      'search_default_partner': 1,
+      'search_default_gender': 1,
+      }</field>
     <field name="help" type="html">
       <p class="oe_view_nocontent_create">
         Click to create a new patient.
@@ -111,8 +149,8 @@
   </record>
 
   <menuitem id="hospital_patient"
-    name="Paitients"
-    sequence="20"
+    name="Patients"
+    sequence="10"
     parent="hospital_patient_root"
     action="action_hospital_patient" />
 </odoo>

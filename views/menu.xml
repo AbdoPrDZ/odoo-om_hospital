@@ -6,7 +6,12 @@
     web_icon="om_hospital,static/description/icon.png" />
 
   <menuitem id="hospital_patient_root"
-    name="Paitients"
+    name="Patients"
+    sequence="10"
+    parent="hospital_menu_root" />
+
+  <menuitem id="hospital_appointment_root"
+    name="Appointments"
     sequence="20"
     parent="hospital_menu_root" />
 </odoo>

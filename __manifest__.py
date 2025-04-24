@@ -35,8 +35,13 @@ Key Features:
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'data/ir_sequence_data.xml',
         'views/menu.xml',
         'views/patient.xml',
+        'views/patient_male.xml',
+        'views/patient_female.xml',
+        'views/patient_kids.xml',
+        'views/appointment.xml',
         'views/sale.xml',
     ],
     # only loaded in demonstration mode

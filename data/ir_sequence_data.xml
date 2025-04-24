@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <record id="seq_om_hospital_patient" model="ir.sequence">
+      <field name="name">Hospital Patient</field>
+      <field name="code">om_hospital.patient_seq</field>
+      <field name="prefix">HP</field>
+      <field name="padding">5</field>
+      <field name="number_next">1</field>
+    </record>
+    <record id="seq_om_hospital_appointment" model="ir.sequence">
+      <field name="name">Hospital Appointment</field>
+      <field name="code">om_hospital.appointment_seq</field>
+      <field name="prefix">HA</field>
+      <field name="padding">5</field>
+      <field name="number_next">1</field>
+    </record>
+  </data>
+</odoo>
