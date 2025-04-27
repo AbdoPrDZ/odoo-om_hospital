@@ -38,7 +38,7 @@ class Patient(models.Model):
       'om_hospital.patient', 'responsible_id', string="Children"
   )
   children_count = fields.Integer(
-      string="Children Count", compute="children_count")
+      string="Children Count", compute="_compute_children_count")
 
   def _validate(self, vals):
     if 'partner_id' in vals and 'responsible_id' in vals and vals['partner_id'] == vals['responsible_id']:
@@ -131,7 +131,6 @@ class Patient(models.Model):
     }
 
   def view_children(self):
-    print('--------------------->', self)
     return {
         'type': 'ir.actions.act_window',
         'name': 'Children',
