@@ -8,14 +8,15 @@ class Patient(models.Model):
   _description = 'Hospital Patient Information'
   _inherit = ['mail.thread', 'mail.activity.mixin']
   _rec_name = 'partner_id'
+  _order = 'reference desc'
 
   reference = fields.Char(string='Reference', required=True, copy=False, readonly=True,
                           default=lambda self: _('New'))
   partner_id = fields.Many2one(
       'res.partner', string='Patient', required=True)
   responsible_id = fields.Many2one(
-      'res.partner', string='Respomsible')
-  age = fields.Integer(string='Age', required=True, default=24, tracking=True)
+      'res.partner', string='Responsible')
+  age = fields.Integer(string='Age', required=True, tracking=True)
   gender = fields.Selection(string='Gender', selection=[
       ('male', 'Male'),
       ('female', 'Female'),
@@ -27,8 +28,17 @@ class Patient(models.Model):
       ('done', 'Done'),
       ('canceled', 'Canceled'),
   ], required=True, default='draft', tracking=True)
+  appointments_ids = fields.One2many(
+      'om_hospital.appointment', 'patient_id', string="Appointments"
+  )
   appointments_count = fields.Integer(
       string="Appointments Count", compute="_compute_appointments_count")
+  image = fields.Binary(string="Patient Image")
+  children_ids = fields.One2many(
+      'om_hospital.patient', 'responsible_id', string="Children"
+  )
+  children_count = fields.Integer(
+      string="Children Count", compute="children_count")
 
   def _validate(self, vals):
     if 'partner_id' in vals and 'responsible_id' in vals and vals['partner_id'] == vals['responsible_id']:
@@ -43,6 +53,10 @@ class Patient(models.Model):
     return vals
 
   @api.model
+  def default_get(self, vals):
+    return super().default_get(vals)
+
+  @api.model
   def create(self, vals):
     if vals.get('reference', ('New')) == _('New'):
       vals['reference'] = self.env['ir.sequence'].next_by_code(
@@ -53,13 +67,14 @@ class Patient(models.Model):
     return super(Patient, self).create(vals)
 
   def write(self, vals):
-    if self.reference == _('New'):
-      vals['reference'] = self.env['ir.sequence'].next_by_code(
-          'om_hospital.patient_seq') or _('New')
+    for rec in self:
+      if rec.reference == _('New'):
+        vals['reference'] = self.env['ir.sequence'].next_by_code(
+            'om_hospital.patient_seq') or _('New')
 
-    vals = self._validate(vals)
+      vals = rec._validate(vals)
 
-    return super(Patient, self).write(vals)
+      super(Patient, rec).write(vals)
 
   def action_confirm(self):
     for rec in self:
@@ -82,3 +97,51 @@ class Patient(models.Model):
       if rec.id:
         rec.appointments_count = self.env['om_hospital.appointment'].search_count(
             [('patient_id', '=', rec.id)])
+
+  def _compute_children_count(self):
+    for rec in self:
+      if rec.id:
+        rec.children_count = self.env['om_hospital.patient'].search_count(
+            [('responsible_id', '=', rec.id)]
+        )
+
+  def view_appointments(self):
+    domain = [('patient_id', '=', self.id)]
+
+    # Method 1
+    # action = self.env.ref('om_hospital.action_hospital_appointment').read()[0]
+
+    # Method 1
+    # action = self.env['ir.actions.actions']._for_xml_id(
+    #     'om_hospital.action_hospital_appointment')
+
+    # action['domain'] = domain
+    # return action
+
+    # Method 1
+    return {
+        'type': 'ir.actions.act_window',
+        'name': 'Appointments',
+        'res_model': 'om_hospital.appointment',
+        'view_mode': 'tree,form',
+        'target': 'current',
+        'target': 'current',
+        'context': dict({}),
+        'domain': domain
+    }
+
+  def view_children(self):
+    print('--------------------->', self)
+    return {
+        'type': 'ir.actions.act_window',
+        'name': 'Children',
+        'res_model': 'om_hospital.patient',
+        'view_mode': 'tree,form',
+        'target': 'current',
+        'target': 'current',
+        'context': dict({
+            'default_responsible_id': self.id,
+            'hide_responsible_id': 1
+        }),
+        'domain': [('responsible_id', '=', self.id)]
+    }

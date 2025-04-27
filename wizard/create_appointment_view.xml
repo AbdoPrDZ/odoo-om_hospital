@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_create_appointment_form" model="ir.ui.view">
+    <field name="name">om_hospital.create_appointment_wizard.form</field>
+    <field name="model">om_hospital.create_appointment_wizard</field>
+    <field name="arch" type="xml">
+      <form name="Create Appointment">
+        <group>
+          <field name="patient_id" />
+          <field name="doctor_id" />
+        </group>
+        <group>
+          <field name="note" />
+        </group>
+        <footer>
+          <button string="Create" type="object" name="create_appointment" class="btn-primary" />
+          <button string="View Patient Appointments" type="object" name="view_patient_appointments"
+            class="btn-primary" />
+          <button string="View Doctor Appointments" type="object" name="view_doctor_appointments"
+            class="btn-primary" />
+          <button string="Cancel" class="btn-secondary" special="cancel" />
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_create_appointment" model="ir.actions.act_window">
+    <field name="name">Create Appointment</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">om_hospital.create_appointment_wizard</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_create_appointment_form" />
+    <field name="target">new</field>
+  </record>
+
+  <menuitem id="hospital_create_appointment"
+    name="Create Appointment"
+    sequence="30"
+    parent="hospital_appointment_root"
+    action="action_create_appointment" />
+</odoo>

@@ -8,9 +8,12 @@ class Appointment(models.Model):
   _description = 'Hospital Appointment Information'
   _inherit = ['mail.thread', 'mail.activity.mixin']
   _rec_name = 'patient_id'
+  _order = 'reference desc'
 
   reference = fields.Char(string='Reference', required=True, copy=False, readonly=True,
                           default=lambda self: _('New'))
+  doctor_id = fields.Many2one(
+      'om_hospital.doctor', string='Doctor', required=True)
   patient_id = fields.Many2one(
       'om_hospital.patient', string='Patient', required=True)
   age = fields.Integer(string='Age', related='patient_id.age', tracking=True)
@@ -28,7 +31,9 @@ class Appointment(models.Model):
   appointment_date = fields.Date(
       string='Date', required=True, default=fields.Datetime.now)
   checkup_date = fields.Datetime(
-      string='Checkup Date', required=True, default=fields.Datetime.now)
+      string='Checkup Date', default=fields.Datetime.now)
+  prescription_lines_ids = fields.One2many(
+      'om_hospital.appointment_prescription_line', 'appointment_id', string='Prescriptions Lines')
 
   @api.model
   def create(self, vals):
@@ -39,20 +44,25 @@ class Appointment(models.Model):
     return super(Appointment, self).create(vals)
 
   def write(self, vals):
-    if self.reference == _('New'):
-      vals['reference'] = self.env['ir.sequence'].next_by_code(
-          'om_hospital.appointment_seq') or _('New')
+    for rec in self:
+      if rec.reference == _('New'):
+        vals['reference'] = self.env['ir.sequence'].next_by_code(
+            'om_hospital.appointment_seq') or _('New')
 
-    return super(Appointment, self).write(vals)
+      super(Appointment, rec).write(vals)
 
   def action_confirm(self):
-    self.state = 'confirmed'
+    for rec in self:
+      rec.state = 'confirmed'
 
   def action_done(self):
-    self.state = 'done'
+    for rec in self:
+      rec.state = 'done'
 
   def action_cancel(self):
-    self.state = 'canceled'
+    for rec in self:
+      rec.state = 'canceled'
 
   def action_restore(self):
-    self.state = 'draft'
+    for rec in self:
+      rec.state = 'draft'

@@ -11,14 +11,6 @@
       'hide_gender': 1,
       'search_default_partner': 1,
       }</field>
-    <field name="help" type="html">
-      <p class="oe_view_nocontent_create">
-        Click to create a new female patient.
-      </p>
-      <p class="oe_view_nocontent_help">
-        You can manage your female patients here.
-      </p>
-    </field>
   </record>
 
   <menuitem id="hospital_female"

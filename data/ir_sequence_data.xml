@@ -6,14 +6,31 @@
       <field name="code">om_hospital.patient_seq</field>
       <field name="prefix">HP</field>
       <field name="padding">5</field>
-      <field name="number_next">1</field>
+      <field name="company_id" eval="False"></field>
     </record>
+
+    <record id="seq_om_hospital_doctor" model="ir.sequence">
+      <field name="name">Hospital Doctor</field>
+      <field name="code">om_hospital.doctor_seq</field>
+      <field name="prefix">HD</field>
+      <field name="padding">5</field>
+      <field name="company_id" eval="False"></field>
+    </record>
+
+    <record id="seq_om_hospital_medicine" model="ir.sequence">
+      <field name="name">Hospital Medicine</field>
+      <field name="code">om_hospital.medicine_seq</field>
+      <field name="prefix">HM</field>
+      <field name="padding">5</field>
+      <field name="company_id" eval="False"></field>
+    </record>
+
     <record id="seq_om_hospital_appointment" model="ir.sequence">
       <field name="name">Hospital Appointment</field>
       <field name="code">om_hospital.appointment_seq</field>
       <field name="prefix">HA</field>
       <field name="padding">5</field>
-      <field name="number_next">1</field>
+      <field name="company_id" eval="False"></field>
     </record>
   </data>
 </odoo>

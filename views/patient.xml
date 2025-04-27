@@ -18,9 +18,17 @@
           <button id="button_restore" class="btn-default" string="Restore as draft"
             type="object" name="action_restore" states="canceled"
             confirm="Are you sure you want to restore this patient" />
+          <button id="create_appointment" class="btn-primary" string="Create Appointment"
+            type="action" name="%(action_create_appointment)d"
+            context="{'default_patient_id': id}" />
+          <button id="view_appointments" class="btn-info" string="View Appointments"
+            type="object" name="view_appointments" />
+          <button id="view_children" class="btn-info" string="View Children"
+            type="object" name="view_children" />
           <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" />
         </header>
         <sheet>
+          <field name="image" widget="image" class="oe_avatar" />
           <div class="oe_title">
             <h1>
               <field name="reference" />
@@ -30,14 +38,35 @@
             <group>
               <field name="partner_id" />
               <field name="age" />
-              <field name="gender" invisible="context.get('hide_gender', True)" />
+              <field name="gender" invisible="context.get('hide_gender')" />
               <field name="appointments_count" />
             </group>
             <group>
               <field name="responsible_id" />
-              <field name="note" />
             </group>
           </group>
+          <notebook>
+            <page string="Patient Description" name="patient_description">
+              <group>
+                <field name="note" />
+              </group>
+            </page>
+            <page string="Appointments" name="appointments">
+              <field name="appointments_ids">
+                <tree sample="1" multi_edit="1">
+                  <field name="reference" />
+                  <field name="doctor_id" optional="show" />
+                  <field name="note" optional="hide" />
+                  <field name="appointment_date" optional="show" />
+                  <field name="state" optional="show" />
+                  <field name="checkup_date" optional="hide" />
+                </tree>
+              </field>
+            </page>
+            <page string="Children" name="children">
+              <field name="children_ids" />
+            </page>
+          </notebook>
         </sheet>
         <div class="oe_chatter">
           <field name="message_follower_ids" />
@@ -77,14 +106,15 @@
     <field name="name">om_hospital.patient.tree</field>
     <field name="model">om_hospital.patient</field>
     <field name="arch" type="xml">
-      <tree>
+      <tree sample="1" multi_edit="1">
         <field name="reference" />
         <field name="partner_id" />
-        <field name="age" />
-        <field name="gender" />
-        <field name="responsible_id" />
-        <field name="state" />
-        <field name="appointments_count" />
+        <field name="age" optional="show" />
+        <field name="gender" optional="show" />
+        <field name="responsible_id" optional="show" />
+        <field name="state" optional="hide" />
+        <field name="appointments_count" optional="hide" />
+        <field name="children_count" optional="hide" />
       </tree>
     </field>
   </record>
@@ -93,7 +123,7 @@
     <field name="name">om_hospital.patient.kanban</field>
     <field name="model">om_hospital.patient</field>
     <field name="arch" type="xml">
-      <kanban class="o_kanban_mobile">
+      <kanban class="o_kanban_mobile" sample="1">
         <field name="id" />
         <field name="reference" />
         <field name="partner_id" />
@@ -138,14 +168,6 @@
       'search_default_partner': 1,
       'search_default_gender': 1,
       }</field>
-    <field name="help" type="html">
-      <p class="oe_view_nocontent_create">
-        Click to create a new patient.
-      </p>
-      <p class="oe_view_nocontent_help">
-        You can manage your patients here.
-      </p>
-    </field>
   </record>
 
   <menuitem id="hospital_patient"
