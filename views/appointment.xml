@@ -23,6 +23,9 @@
           <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done" />
         </header>
         <sheet>
+          <widget name="web_ribbon" title="Draft" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+          <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+
           <div class="oe_title">
             <h1>
               <field name="reference" />
@@ -39,6 +42,7 @@
               <field name="appointment_date" />
               <field name="checkup_date" />
               <field name="amount" />
+              <field name="active" invisible="1" />
             </group>
           </group>
           <notebook>
@@ -86,6 +90,8 @@
         <field name="note" string="Description" />
         <field name="appointment_date" string="Date" />
         <separator />
+        <filter string="Active" name="active" domain="[('active', '=', True)]" />
+        <filter string="Inactive" name="inactive" domain="[('active', '=', False)]" />
         <group expand="1" string="Group By">
           <filter string="Patient" name="patient" context="{ 'group_by': 'patient_id' }"
             invisible="context.get('hide_patient_id')" />
@@ -93,6 +99,10 @@
             invisible="context.get('hide_doctor_id')" />
           <filter string="Date" name="appointment_date" context="{ 'group_by': 'appointment_date' }" />
         </group>
+        <searchpanel>
+          <field name="doctor_id" string="Doctors" enable_counters="1" />
+          <field name="state" select="multi" string="Status" enable_counters="1" />
+        </searchpanel>
       </search>
     </field>
   </record>
@@ -124,6 +134,7 @@
         <field name="state" optional="show" />
         <field name="checkup_date" optional="hide" />
         <field name="amount" optional="show" />
+        <field name="active" invisible="1" />
       </tree>
     </field>
   </record>

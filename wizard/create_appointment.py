@@ -13,6 +13,20 @@ class CreateAppointmentWizard(models.TransientModel):
       'om_hospital.doctor', string='Doctor', required=True)
   note = fields.Text(string='Description')
 
+  # @api.model
+  # def default_get(self, fields):
+  #   res = super(CreateAppointmentWizard, self).default_get(fields)
+  #   active_id = self.env.context.get('active_id')
+  #   if active_id:
+  #     patient = self.env['om_hospital.patient'].browse(active_id)
+  #     doctor = self.env['om_hospital.doctor'].browse(active_id)
+  #     if patient:
+  #       res.update({
+  #           'patient_id': patient.id if patient else fields.get('patient_id'),
+  #           'doctor_id': doctor.id if doctor else fields.get('doctor_id'),
+  #       })
+  #   return res
+
   def create_appointment(self):
     vals = {
         'patient_id': self.patient_id.id,

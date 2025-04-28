@@ -13,7 +13,7 @@ class PatientReportXlsx(models.AbstractModel):
   def generate_xlsx_report(self, workbook, data, patients):
     sheet = workbook.add_worksheet('Patients')
     header_format = workbook.add_format(
-        {'bold': True, 'align': 'center', 'bg_color': '#00aeac', 'font_color': '#09406b'})
+        {'bold': True, 'align': 'center', 'bg_color': '#00AEAC', 'font_color': '#09406B'})
 
     j = 0
     for col in ['Image', 'ID', 'Reference', 'Name', 'Responsible', 'Age', 'Gender', 'Description', 'Appointments Count', 'Children Count']:

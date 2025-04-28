@@ -36,6 +36,7 @@ Key Features:
         "views/medicine.xml",
         "views/doctor.xml",
         "views/sale.xml",
+        "views/partner.xml",
         "report/patient_report_template.xml",
         "report/patient_report.xml",
         "report/patient_report_xlsx.xml",
