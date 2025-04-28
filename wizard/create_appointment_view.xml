@@ -6,8 +6,8 @@
     <field name="arch" type="xml">
       <form name="Create Appointment">
         <group>
-          <field name="patient_id" />
-          <field name="doctor_id" />
+          <field name="patient_id" invisible="context.get('hide_patient_id')" />
+          <field name="doctor_id" invisible="context.get('hide_doctor_id')" />
         </group>
         <group>
           <field name="note" />

@@ -15,30 +15,26 @@ class Patient(models.Model):
   partner_id = fields.Many2one(
       'res.partner', string='Patient', required=True)
   responsible_id = fields.Many2one(
-      'res.partner', string='Responsible')
+      'om_hospital.patient', string='Responsible')
   age = fields.Integer(string='Age', required=True, tracking=True)
   gender = fields.Selection(string='Gender', selection=[
       ('male', 'Male'),
       ('female', 'Female'),
   ], required=True, default='male', tracking=True)
   note = fields.Text(string='Description', tracking=True)
-  state = fields.Selection(string='Status', selection=[
-      ('draft', 'Draft'),
-      ('confirmed', 'Confirmed'),
-      ('done', 'Done'),
-      ('canceled', 'Canceled'),
-  ], required=True, default='draft', tracking=True)
   appointments_ids = fields.One2many(
       'om_hospital.appointment', 'patient_id', string="Appointments"
   )
   appointments_count = fields.Integer(
       string="Appointments Count", compute="_compute_appointments_count")
-  image = fields.Binary(string="Patient Image")
+  image = fields.Binary(string="Patient Image",
+                        related='partner_id.image_1920', readonly=True)
   children_ids = fields.One2many(
       'om_hospital.patient', 'responsible_id', string="Children"
   )
   children_count = fields.Integer(
       string="Children Count", compute="_compute_children_count")
+  active = fields.Boolean(string='Active', default=True)
 
   def _validate(self, vals):
     if 'partner_id' in vals and 'responsible_id' in vals and vals['partner_id'] == vals['responsible_id']:
@@ -52,9 +48,8 @@ class Patient(models.Model):
           'You must select a responsible for patients under 13 years old.')
     return vals
 
-  @api.model
-  def default_get(self, vals):
-    return super().default_get(vals)
+  def name_get(self):
+    return [(rec.id, f'[{rec.reference}] {rec.partner_id.name}') for rec in self]
 
   @api.model
   def create(self, vals):
@@ -75,22 +70,6 @@ class Patient(models.Model):
       vals = rec._validate(vals)
 
       super(Patient, rec).write(vals)
-
-  def action_confirm(self):
-    for rec in self:
-      rec.state = 'confirmed'
-
-  def action_done(self):
-    for rec in self:
-      rec.state = 'done'
-
-  def action_cancel(self):
-    for rec in self:
-      rec.state = 'canceled'
-
-  def action_restore(self):
-    for rec in self:
-      rec.state = 'draft'
 
   def _compute_appointments_count(self):
     for rec in self:
@@ -125,8 +104,10 @@ class Patient(models.Model):
         'res_model': 'om_hospital.appointment',
         'view_mode': 'tree,form',
         'target': 'current',
-        'target': 'current',
-        'context': dict({}),
+        'context': dict({
+            'default_patient_id': self.id,
+            'hide_patient_id': 1
+        }),
         'domain': domain
     }
 
@@ -136,7 +117,6 @@ class Patient(models.Model):
         'name': 'Children',
         'res_model': 'om_hospital.patient',
         'view_mode': 'tree,form',
-        'target': 'current',
         'target': 'current',
         'context': dict({
             'default_responsible_id': self.id,

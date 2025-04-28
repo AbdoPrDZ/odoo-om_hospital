@@ -6,28 +6,26 @@
     <field name="arch" type="xml">
       <form>
         <header>
-          <button id="button_confirm" class="btn-primary" string="Confirm"
-            type="object" name="action_confirm" states="draft"
-            confirm="Are you sure you want to confirm this patient?" />
-          <button id="button_done" class="btn-success" string="Mark as done"
-            type="object" name="action_done" states="confirmed"
-            confirm="Are you sure you want to mark this patient as done?" />
-          <button id="button_cancel" class="btn-danger" string="Cancel"
-            type="object" name="action_cancel" states="draft,confirmed,done"
-            confirm="Are you sure you want to cancel this patient" />
-          <button id="button_restore" class="btn-default" string="Restore as draft"
-            type="object" name="action_restore" states="canceled"
-            confirm="Are you sure you want to restore this patient" />
           <button id="create_appointment" class="btn-primary" string="Create Appointment"
             type="action" name="%(action_create_appointment)d"
-            context="{'default_patient_id': id}" />
+            context="{'default_patient_id': id, 'hide_patient_id': 1}" />
           <button id="view_appointments" class="btn-info" string="View Appointments"
             type="object" name="view_appointments" />
           <button id="view_children" class="btn-info" string="View Children"
             type="object" name="view_children" />
-          <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" />
         </header>
         <sheet>
+          <div class="oe_button_box" name="button_box">
+            <button name="view_appointments" type="object"
+              class="oe_stat_button" icon="fa-calendar">
+              <div class="o_stat_info">
+                <field name="appointments_count" class="o_stat_value" />
+                <span class="o_stat_text">
+                  Appointments</span>
+              </div>
+            </button>
+          </div>
+
           <field name="image" widget="image" class="oe_avatar" />
           <div class="oe_title">
             <h1>
@@ -36,13 +34,13 @@
           </div>
           <group>
             <group>
-              <field name="partner_id" />
+              <field name="partner_id" invisible="context.get('hide_partner_id')" />
               <field name="age" />
               <field name="gender" invisible="context.get('hide_gender')" />
               <field name="appointments_count" />
             </group>
             <group>
-              <field name="responsible_id" />
+              <field name="responsible_id" invisible="context.get('hide_responsible_id')" />
             </group>
           </group>
           <notebook>
@@ -58,8 +56,8 @@
                   <field name="doctor_id" optional="show" />
                   <field name="note" optional="hide" />
                   <field name="appointment_date" optional="show" />
-                  <field name="state" optional="show" />
                   <field name="checkup_date" optional="hide" />
+                  <field name="amount" optional="show" />
                 </tree>
               </field>
             </page>
@@ -83,7 +81,8 @@
     <field name="arch" type="xml">
       <search string="Patients">
         <field name="partner_id" string="Partner" />
-        <field name="responsible_id" string="Responsible" />
+        <field name="responsible_id" string="Responsible"
+          invisible="context.get('hide_responsible_id')" />
         <field name="note" string="Description" />
         <separator />
         <filter string="Male" name="male" domain="[('gender', '=', 'male')]" />
@@ -95,10 +94,28 @@
         <filter string="Baby" name="baby" domain="[('age', '&lt;', 1)]" />
         <group expand="1" string="Group By">
           <filter string="Gender" name="gender" context="{ 'group_by': 'gender' }" />
-          <filter string="Responsible" name="responsible" context="{ 'group_by': 'responsible_id' }" />
+          <filter string="Responsible" name="responsible" context="{ 'group_by': 'responsible_id' }"
+            invisible="context.get('hide_responsible_id')" />
           <filter string="Partner" name="partner" context="{ 'group_by': 'partner_id' }" />
         </group>
       </search>
+    </field>
+  </record>
+
+  <record id="option_create_appointment" model="ir.actions.server">
+    <field name="name">Create Appointment</field>
+    <field name="model_id" ref="model_om_hospital_patient" />
+    <field name="binding_model_id" ref="model_om_hospital_patient" />
+    <field name="binding_view_types">form</field>
+    <field name="state">code</field>
+    <field name="code">
+      if record:
+        context = env.context
+        context['default_patient_id'] = record.id
+        context['hide_patient_id'] = 1
+        action_values = env.ref('om_hospital.action_create_appointment').sudo().read()[0]
+        action_values.update({'context': context})
+        action = action_values
     </field>
   </record>
 
@@ -111,8 +128,7 @@
         <field name="partner_id" />
         <field name="age" optional="show" />
         <field name="gender" optional="show" />
-        <field name="responsible_id" optional="show" />
-        <field name="state" optional="hide" />
+        <field name="responsible_id" optional="show" invisible="context.get('hide_responsible_id')" />
         <field name="appointments_count" optional="hide" />
         <field name="children_count" optional="hide" />
       </tree>
@@ -131,7 +147,6 @@
         <field name="gender" />
         <field name="note" />
         <field name="responsible_id" />
-        <field name="state" />
         <templates>
           <t t-name="kanban-box">
             <div t-attf-class="oe_kanban_global_click">
@@ -148,8 +163,6 @@
                   <t t-if="record.responsible_id.raw_value">
                     <li>Responsible: <span t-field="record.responsible_id" /></li>
                   </t>
-                  <li> Status: <field name="state" />
-                  </li>
                 </ul>
               </div>
             </div>
@@ -174,5 +187,11 @@
     name="Patients"
     sequence="10"
     parent="hospital_patient_root"
+    action="action_hospital_patient" />
+
+  <menuitem id="sale_order_patient"
+    name="Patients"
+    sequence="3"
+    parent="sale.sale_order_menu"
     action="action_hospital_patient" />
 </odoo>

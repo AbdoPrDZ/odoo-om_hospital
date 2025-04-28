@@ -23,7 +23,12 @@ class Doctor(models.Model):
   appointments_count = fields.Integer(
       string="Appointments Count", compute="_compute_appointments_count")
   active = fields.Boolean(string="Active", default=True)
-  image = fields.Binary(string="Doctor Image")
+  image = fields.Binary(string="Doctor Image",
+                        related='partner_id.image_1920', readonly=True)
+  active = fields.Boolean(string='Active', default=True)
+
+  def name_get(self):
+    return [(rec.id, f'[{rec.reference}] {rec.partner_id.name}') for rec in self]
 
   @api.model
   def create(self, vals):
@@ -53,7 +58,9 @@ class Doctor(models.Model):
         'res_model': 'om_hospital.appointment',
         'view_mode': 'tree,form',
         'target': 'current',
-        'target': 'current',
-        'context': dict({}),
+        'context': dict({
+            'default_doctor_id': self.id,
+            'hide_doctor_id': 1
+        }),
         'domain': [('doctor_id', '=', self.id)]
     }

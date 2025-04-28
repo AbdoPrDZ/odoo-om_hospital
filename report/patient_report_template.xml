@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="patient_report">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="doc">
+        <t t-call="web.external_layout">
+          <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)" />
+
+          <t t-set="address">
+            <t t-if="doc.image">
+              <img t-att-src="image_data_uri(doc.image)"
+                style="max-height:150px; max-width:150px;" class="img-thumbnail" />
+            </t>
+            <div t-field="doc.partner_id"
+              t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}" />
+          </t>
+
+          <div class="page">
+            <div class="oe_structure" />
+            <h2 class="mt16">
+              <span>Patient # </span>
+              <span t-field="doc.reference" />
+            </h2>
+
+            <div class="row mt32 mb32" id="informations">
+              <div class="col-auto col-3 mw-100 mb-2">
+                <strong>Join Date:</strong>
+                <p class="m-0" t-field="doc.create_date" />
+              </div>
+              <div class="col-auto col-3 mw-100 mb-2">
+                <strong>Gender:</strong>
+                <p class="m-0" t-field="doc.gender" />
+              </div>
+              <div class="col-auto col-3 mw-100 mb-2" t-if="doc.responsible_id">
+                <strong>Responsible:</strong>
+                <p class="m-0" t-field="doc.responsible_id.partner_id.name" />
+              </div>
+            </div>
+
+            <t t-set="amount_total" t-value="0" />
+
+            <table class="table table-sm o_main_table">
+              <thead style="display: table-row-group">
+                <tr>
+                  <th name="th_reference" class="text-left">Reference</th>
+                  <th name="th_doctor_id" class="text-left">Doctor</th>
+                  <th name="th_note" class="text-left">Description</th>
+                  <th name="th_appointment_date" class="text-left">Date</th>
+                  <th name="th_checkup_date" class="text-left">Checkup Date</th>
+                  <th name="th_amount" class="text-left">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <t t-foreach="doc.appointments_ids" t-as="line">
+                  <t t-set="amount_total" t-value="amount_total + line.amount" />
+
+                  <tr>
+                    <td name="th_reference">
+                      <span t-field="line.reference" />
+                    </td>
+                    <td name="th_doctor_id">
+                      <span t-field="line.doctor_id.partner_id.name" />
+                    </td>
+                    <td name="th_note">
+                      <span t-field="line.note" />
+                    </td>
+                    <td name="th_appointment_date">
+                      <span t-field="line.appointment_date" />
+                    </td>
+                    <td name="th_checkup_date">
+                      <span t-field="line.checkup_date" />
+                    </td>
+                    <td name="th_amount">
+                      <span t-field="line.amount" />
+                    </td>
+                  </tr>
+                </t>
+              </tbody>
+            </table>
+
+            <div class="clearfix" name="so_total_summary">
+              <div id="total" class="row" name="total">
+                <div
+                  t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ml-auto">
+                  <table class="table table-sm">
+                    <tr class="border-black o_total">
+                      <td name="td_amount_total_label">
+                        <strong>Total</strong>
+                      </td>
+                      <td name="td_amount_total" class="text-right">
+                        <span t-esc="amount_total" />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>

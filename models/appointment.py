@@ -24,9 +24,9 @@ class Appointment(models.Model):
   note = fields.Text(string='Description', tracking=True)
   state = fields.Selection(string='Status', selection=[
       ('draft', 'Draft'),
-      ('confirmed', 'Confirmed'),
+      ('confirm', 'Confirm'),
       ('done', 'Done'),
-      ('canceled', 'Canceled'),
+      ('cancel', 'Cancel'),
   ], required=True, default='draft', tracking=True)
   appointment_date = fields.Date(
       string='Date', required=True, default=fields.Datetime.now)
@@ -34,6 +34,17 @@ class Appointment(models.Model):
       string='Checkup Date', default=fields.Datetime.now)
   prescription_lines_ids = fields.One2many(
       'om_hospital.appointment_prescription_line', 'appointment_id', string='Prescriptions Lines')
+  amount = fields.Float(string="Amount", required=True)
+  active = fields.Boolean(string='Active', default=True)
+
+  def name_get(self):
+    return [(rec.id, f'[{rec.reference}] {rec.doctor_id.partner_id.name} - {rec.patient_id.partner_id.name}') for rec in self]
+
+  @api.constrains('amount')
+  def check_amount(self):
+    for rec in self:
+      if rec.amount <= 0:
+        raise models.ValidationError('Amount must be greater then 0.')
 
   @api.model
   def create(self, vals):
@@ -51,9 +62,16 @@ class Appointment(models.Model):
 
       super(Appointment, rec).write(vals)
 
+  def unlink(self):
+    for rec in self:
+      if not rec.state in ['draft', 'cancel']:
+        raise models.ValidationError(
+            'You can\'t delete this appointment you have to cancel it first or move it to draft?')
+      super(Appointment, rec).unlink()
+
   def action_confirm(self):
     for rec in self:
-      rec.state = 'confirmed'
+      rec.state = 'confirm'
 
   def action_done(self):
     for rec in self:
@@ -61,8 +79,15 @@ class Appointment(models.Model):
 
   def action_cancel(self):
     for rec in self:
-      rec.state = 'canceled'
+      rec.state = 'cancel'
 
   def action_restore(self):
     for rec in self:
       rec.state = 'draft'
+
+  def action_url(self):
+    return {
+      'type': 'ir.actions.act_url',
+      'target': 'new',
+      'url': 'https://github.com/AbdoPrDZ/odoo-om_hospital'
+    }

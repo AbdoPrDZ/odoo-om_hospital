@@ -26,16 +26,26 @@ class CreateAppointmentWizard(models.TransientModel):
         'view_mode': 'form',
         'res_model': 'om_hospital.appointment',
         'res_id': rec.id,
+        'context': {
+            'default_patient_id': self.patient_id.id,
+            'hide_patient_id': 1,
+        }
     }
 
   def view_patient_appointments(self):
     action = self.env.ref('om_hospital.action_hospital_appointment').read()[0]
     action['domain'] = [('patient_id', '=', self.patient_id.id)]
-    action['context'] = dict({})
+    action['context'] = dict({
+        'default_patient_id': self.patient_id.id,
+        'hide_patient_id': 1,
+    })
     return action
 
   def view_doctor_appointments(self):
     action = self.env.ref('om_hospital.action_hospital_appointment').read()[0]
     action['domain'] = [('doctor_id', '=', self.doctor_id.id)]
-    action['context'] = dict({})
+    action['context'] = dict({
+        'default_doctor_id': self.patient_id.id,
+        'hide_doctor_id': 1
+    })
     return action

@@ -22,7 +22,7 @@ Key Features:
     'category': 'Productivity/Other',
     'version': '14.0.1.0.0',
     'sequence': 10,
-    'depends': ['base', 'sale', 'mail'],
+    'depends': ['base', 'sale', 'mail', 'report_xlsx'],
     "data": [
         "data/ir_sequence_data.xml",
         "security/ir.model.access.csv",
@@ -36,6 +36,9 @@ Key Features:
         "views/medicine.xml",
         "views/doctor.xml",
         "views/sale.xml",
+        "report/patient_report_template.xml",
+        "report/patient_report.xml",
+        "report/patient_report_xlsx.xml",
     ],
     'demo': [
         'demo/demo.xml',
