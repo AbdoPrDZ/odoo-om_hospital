@@ -29,16 +29,22 @@ class Appointment(models.Model):
       ('cancel', 'Cancel'),
   ], required=True, default='draft', tracking=True)
   appointment_date = fields.Date(
-      string='Date', required=True, default=fields.Datetime.now)
+      string='Date', required=True, default=fields.Datetime.now, tracking=True)
   checkup_date = fields.Datetime(
-      string='Checkup Date', default=fields.Datetime.now)
+      string='Checkup Date', default=fields.Datetime.now, tracking=True)
   prescription_lines_ids = fields.One2many(
       'om_hospital.appointment_prescription_line', 'appointment_id', string='Prescriptions Lines')
-  amount = fields.Float(string="Amount", required=True)
-  active = fields.Boolean(string='Active', default=True)
+  amount = fields.Float(string="Amount", required=True, tracking=True)
+  active = fields.Boolean(string='Active', default=True, tracking=True)
 
   def name_get(self):
-    return [(rec.id, f'[{rec.reference}] {rec.doctor_id.partner_id.name} - {rec.patient_id.partner_id.name}') for rec in self]
+    records = []
+
+    for rec in self:
+      records.append((rec.id, rec.patient_id.partner_id.name if self.env.context.get(
+          'hide_ref') else f'[{rec.reference}] {rec.patient_id.partner_id.name}'))
+
+    return records
 
   @api.constrains('amount')
   def check_amount(self):
@@ -87,7 +93,7 @@ class Appointment(models.Model):
 
   def action_url(self):
     return {
-      'type': 'ir.actions.act_url',
-      'target': 'new',
-      'url': 'https://github.com/AbdoPrDZ/odoo-om_hospital'
+        'type': 'ir.actions.act_url',
+        'target': 'new',
+        'url': 'https://github.com/AbdoPrDZ/odoo-om_hospital'
     }

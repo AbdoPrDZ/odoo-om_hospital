@@ -21,4 +21,9 @@
       </field>
     </field>
   </record>
+
+  <!-- TODO: Remove report action option -->
+  <record id="sale.action_report_saleorder" model="ir.actions.report">
+    <field name="binding_model_id" eval="False"/>
+  </record>
 </odoo>

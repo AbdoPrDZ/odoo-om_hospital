@@ -589,3 +589,10 @@
     </data>
   </odoo>
   ```
+
+
+
+<!-- TODO: -->
+# TO Learn
+
+- [XML RPC](https://www.youtube.com/playlist?list=PLqRRLx0cl0hpaeRhYeNEk7xQgOxv16VF-)

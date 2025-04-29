@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_create_appointment_report_form" model="ir.ui.view">
+    <field name="name">om_hospital.create_appointment_report_wizard.form</field>
+    <field name="model">om_hospital.create_appointment_report_wizard</field>
+    <field name="arch" type="xml">
+      <form name="Create Appointment Report">
+        <group>
+          <field name="patient_id" invisible="context.get('hide_patient_id')" />
+          <field name="appointments_count" />
+        </group>
+        <group>
+          <field name="date_from" />
+          <field name="date_to" />
+        </group>
+        <footer>
+          <button string="Print PDF" type="object" name="create_appointment_pdf_report" class="btn-primary" />
+          <button string="Export Excel" type="object" name="create_appointment_xlsx_report" class="btn-primary" />
+          <button string="View Patient Appointments" type="object" name="view_patient_appointments"
+            class="btn-primary" />
+          <button string="Cancel" class="btn-secondary" special="cancel" />
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_create_appointment_report" model="ir.actions.act_window">
+    <field name="name">Create Appointment Report</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">om_hospital.create_appointment_report_wizard</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_create_appointment_report_form" />
+    <field name="target">new</field>
+  </record>
+
+  <menuitem id="hospital_create_appointment_report"
+    name="Create Appointment Report"
+    sequence="30"
+    parent="hospital_appointment_root"
+    action="action_create_appointment_report" />
+</odoo>

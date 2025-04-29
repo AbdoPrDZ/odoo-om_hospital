@@ -23,8 +23,10 @@
           <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done" />
         </header>
         <sheet>
-          <widget name="web_ribbon" title="Draft" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
-          <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+          <widget name="web_ribbon" title="Draft" bg_color="bg-warning"
+            attrs="{'invisible': [('state', '!=', 'draft')]}" />
+          <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+            attrs="{'invisible': [('active', '=', True)]}" />
 
           <div class="oe_title">
             <h1>
@@ -34,7 +36,8 @@
           <group>
             <group>
               <field name="patient_id" invisible="context.get('hide_patient_id')" />
-              <field name="doctor_id" invisible="context.get('hide_doctor_id')" />
+              <field name="doctor_id" invisible="context.get('hide_doctor_id')"
+                options="{'no_create': 1, 'no_create_edit': 1}" />
               <field name="age" readonly="1" />
               <field name="gender" readonly="1" />
             </group>
@@ -52,7 +55,7 @@
               </group>
             </page>
             <page string="Medicine" name="medicine">
-              <field name="prescription_lines_ids">
+              <field name="prescription_lines_ids" context="{'hide_ref': 1}">
                 <tree editable="bottom" multi_edit="1">
                   <field name="medicine_id" />
                   <field name="quantity" optional="show" />

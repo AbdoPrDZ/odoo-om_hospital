@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="report_appointment_details_xlsx" model="ir.actions.report">
+      <field name="name">Appointment Details Excel</field>
+      <field name="model">om_hospital.appointment</field>
+      <field name="report_type">xlsx</field>
+      <field name="report_name">om_hospital.appointment_report_xlsx</field>
+      <field name="report_file">om_hospital.appointment_report_xlsx</field>
+      <field name="binding_model_id" ref="model_om_hospital_appointment" />
+      <field name="binding_type">report</field>
+    </record>
+  </data>
+</odoo>

@@ -28,6 +28,7 @@ Key Features:
         "security/ir.model.access.csv",
         "views/menu.xml",
         "wizard/create_appointment_view.xml",
+        "wizard/create_appointment_report_view.xml",
         "views/patient_female.xml",
         "views/patient_kids.xml",
         "views/patient_male.xml",
@@ -40,6 +41,9 @@ Key Features:
         "report/patient_report_template.xml",
         "report/patient_report.xml",
         "report/patient_report_xlsx.xml",
+        "report/appointment_report_template.xml",
+        "report/appointment_report.xml",
+        "report/appointment_report_xlsx.xml",
     ],
     'demo': [
         'demo/demo.xml',

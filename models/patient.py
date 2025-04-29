@@ -15,7 +15,7 @@ class Patient(models.Model):
   partner_id = fields.Many2one(
       'res.partner', string='Patient', required=True)
   responsible_id = fields.Many2one(
-      'om_hospital.patient', string='Responsible')
+      'res.partner', string='Responsible')
   age = fields.Integer(string='Age', required=True, tracking=True)
   gender = fields.Selection(string='Gender', selection=[
       ('male', 'Male'),
@@ -29,12 +29,12 @@ class Patient(models.Model):
       string="Appointments Count", compute="_compute_appointments_count")
   image = fields.Binary(string="Patient Image",
                         related='partner_id.image_1920', readonly=True)
-  children_ids = fields.One2many(
-      'om_hospital.patient', 'responsible_id', string="Children"
-  )
+  # children_ids = fields.One2many(
+  #     'res.partner', 'responsible_id', string="Children"
+  # )
   children_count = fields.Integer(
       string="Children Count", compute="_compute_children_count")
-  active = fields.Boolean(string='Active', default=True)
+  active = fields.Boolean(string='Active', default=True, tracking=True)
 
   def _validate(self, vals):
     if 'partner_id' in vals and 'responsible_id' in vals and vals['partner_id'] == vals['responsible_id']:
@@ -49,7 +49,13 @@ class Patient(models.Model):
     return vals
 
   def name_get(self):
-    return [(rec.id, f'[{rec.reference}] {rec.partner_id.name}') for rec in self]
+    records = []
+
+    for rec in self:
+      records.append((rec.id, rec.partner_id.name if self.env.context.get(
+          'hide_ref') else f'[{rec.reference}] {rec.partner_id.name}'))
+
+    return records
 
   @api.model
   def create(self, vals):
@@ -81,7 +87,7 @@ class Patient(models.Model):
     for rec in self:
       if rec.id:
         rec.children_count = self.env['om_hospital.patient'].search_count(
-            [('responsible_id', '=', rec.id)]
+            [('responsible_id', '=', rec.partner_id.id)]
         )
 
   def view_appointments(self):
@@ -119,8 +125,8 @@ class Patient(models.Model):
         'view_mode': 'tree,form',
         'target': 'current',
         'context': dict({
-            'default_responsible_id': self.id,
+            'default_responsible_id': self.partner_id.id,
             'hide_responsible_id': 1
         }),
-        'domain': [('responsible_id', '=', self.id)]
+        'domain': [('responsible_id', '=', self.partner_id.id)]
     }

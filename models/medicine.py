@@ -11,14 +11,21 @@ class Medicine(models.Model):
 
   reference = fields.Char(string='Reference', required=True, copy=False, readonly=True,
                           default=lambda self: _('New'))
-  name = fields.Char(string="Name", required=True)
-  note = fields.Text(string='Description')
-  usage = fields.Text(string='Usage')
+  name = fields.Char(string="Name", required=True, tracking=True)
+  note = fields.Text(string='Description', tracking=True)
+  usage = fields.Text(string='Usage', tracking=True)
   image = fields.Binary(string="Doctor Image")
-  active = fields.Boolean(string='Active', default=True)
+  active = fields.Boolean(string='Active', default=True, tracking=True)
 
   def name_get(self):
-    return [(rec.id, f'[{rec.reference}] {rec.name}') for rec in self]
+    records = []
+
+    for rec in self:
+      records.append((rec.id, rec.name if self.env.context.get(
+          'hide_ref') else f'[{rec.reference}] {rec.name}'))
+
+    return records
+
 
   # TODO: Fix duplicate check
   ##############################################################################################################################
