@@ -6,7 +6,7 @@ from odoo import models, fields, api, _
 class Medicine(models.Model):
   _name = 'om_hospital.medicine'
   _description = 'Hospital Medicine Information'
-  _inherit = ['mail.thread', 'mail.activity.mixin']
+  _inherit = ['mail.thread', 'mail.activity.mixin'] # TODO: inherit from product.template
   _order = 'reference desc'
 
   reference = fields.Char(string='Reference', required=True, copy=False, readonly=True,

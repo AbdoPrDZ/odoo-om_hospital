@@ -8,14 +8,12 @@
   <menuitem id="hospital_patient_root"
     name="Patients"
     sequence="10"
-    parent="hospital_menu_root"
-    groups="base.group_system" />
+    parent="hospital_menu_root" />
 
   <menuitem id="hospital_doctor_root"
     name="Doctors"
     sequence="20"
-    parent="hospital_menu_root"
-    groups="base.group_system" />
+    parent="hospital_menu_root"/>
 
   <menuitem id="hospital_appointment_root"
     name="Appointments"

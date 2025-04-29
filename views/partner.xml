@@ -9,8 +9,23 @@
         <field name="email" position="move" />
       </field>
       <field name="email" position="before">
-        <field name="is_patient" />
+        <field name="is_patient" optional="hide" />
+        <field name="is_doctor" optional="hide"/>
       </field>
+    </field>
+  </record>
+
+  <!-- inherit search view -->
+  <record id="view_partner_filter" model="ir.ui.view">
+    <field name="name">om_hospital.partner.filter</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_res_partner_filter"/>
+    <field name="arch" type="xml">
+      <filter name="inactive" position="before">
+        <filter name="is_patient" string="Patients" domain="[('is_patient', '=', True)]"/>
+        <filter name="is_doctor" string="Doctors" domain="[('is_doctor', '=', True)]"/>
+        <separator/>
+      </filter>
     </field>
   </record>
 </odoo>

@@ -35,6 +35,17 @@ class Doctor(models.Model):
 
     return records
 
+  def _grant_access(self):
+    """ Grant access to the doctor group for the linked user """
+    if self.partner_id and len(self.partner_id.user_ids) > 0:
+      for user in self.partner_id.user_ids:  # Take the first linked user
+        doctor_group = self.env.ref('om_hospital.group_hospital_doctor')
+        
+        if doctor_group not in user.groups_id:
+          doctor_group.sudo().write({
+              'users': [(4, user.id)]  # Add the user to the doctor group
+          })
+
   @api.model
   def create(self, vals):
     if vals.get('reference', ('New')) == _('New'):
@@ -42,23 +53,28 @@ class Doctor(models.Model):
           'om_hospital.doctor_seq') or _('New')
 
     doctor = super(Doctor, self).create(vals)
-    doctor._verify_access()
+    doctor._grant_access()
     return doctor
-
-  def _verify_access(self):
-    if self.partner_id and self.partner_id.user_ids:
-        user = self.partner_id.user_ids[0]  # Take the first linked user
-        doctor_group = self.env.ref('om_hospital.group_hospital_doctor')
-        if doctor_group not in user.groups_id:
-            user.groups_id = [(4, doctor_group.id)]
 
   def write(self, vals):
     for rec in self:
       if rec.reference == _('New'):
         vals['reference'] = self.env['ir.sequence'].next_by_code(
             'om_hospital.doctor_seq') or _('New')
-      doctor = super(Doctor, rec).write(vals)
-      doctor._verify_access()
+      super(Doctor, rec).write(vals)
+      rec._grant_access()
+
+  def unlink(self):
+    for rec in self:
+      # Check if the doctor is linked to a user and remove the access
+      if rec.partner_id and len(rec.partner_id.user_ids) > 0:
+        for user in rec.partner_id.user_ids:
+          doctor_group = self.env.ref('om_hospital.group_hospital_doctor')
+          if doctor_group in user.groups_id:
+            doctor_group.sudo().write({
+                'users': [(3, user.id)]  # Remove the user from the doctor group
+            })
+      super(Doctor, rec).unlink()
 
   def _compute_appointments_count(self):
     for rec in self:
