@@ -35,21 +35,30 @@ class Doctor(models.Model):
 
     return records
 
-
   @api.model
   def create(self, vals):
     if vals.get('reference', ('New')) == _('New'):
       vals['reference'] = self.env['ir.sequence'].next_by_code(
           'om_hospital.doctor_seq') or _('New')
 
-    return super(Doctor, self).create(vals)
+    doctor = super(Doctor, self).create(vals)
+    doctor._verify_access()
+    return doctor
+
+  def _verify_access(self):
+    if self.partner_id and self.partner_id.user_ids:
+        user = self.partner_id.user_ids[0]  # Take the first linked user
+        doctor_group = self.env.ref('om_hospital.group_hospital_doctor')
+        if doctor_group not in user.groups_id:
+            user.groups_id = [(4, doctor_group.id)]
 
   def write(self, vals):
     for rec in self:
       if rec.reference == _('New'):
         vals['reference'] = self.env['ir.sequence'].next_by_code(
             'om_hospital.doctor_seq') or _('New')
-      super(Doctor, rec).write(vals)
+      doctor = super(Doctor, rec).write(vals)
+      doctor._verify_access()
 
   def _compute_appointments_count(self):
     for rec in self:

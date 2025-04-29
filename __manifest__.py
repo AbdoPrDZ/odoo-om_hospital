@@ -25,6 +25,7 @@ Key Features:
     'depends': ['base', 'sale', 'mail', 'report_xlsx'],
     "data": [
         "data/ir_sequence_data.xml",
+        "security/security.xml",
         "security/ir.model.access.csv",
         "views/menu.xml",
         "wizard/create_appointment_view.xml",
