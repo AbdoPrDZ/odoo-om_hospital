@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from . import model_mixin
 from . import patient
 from . import reception
 from . import doctor

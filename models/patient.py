@@ -6,9 +6,10 @@ from odoo import models, fields, api, _
 class Patient(models.Model):
   _name = 'om_hospital.patient'
   _description = 'Hospital Patient Information'
-  _inherit = ['mail.thread', 'mail.activity.mixin']
+  _inherit = ['mail.thread', 'mail.activity.mixin', 'om_hospital.model.mixin']
   _rec_name = 'partner_id'
   _order = 'reference desc'
+  _sequence_id = 'om_hospital.patient_seq'
 
   reference = fields.Char(string='Reference', required=True, copy=False, readonly=True,
                           default=lambda self: _('New'))
