@@ -6,7 +6,8 @@ from odoo import models, fields, api, _
 class Medicine(models.Model):
   _name = 'om_hospital.medicine'
   _description = 'Hospital Medicine Information'
-  _inherit = ['mail.thread', 'mail.activity.mixin'] # TODO: inherit from product.template
+  # TODO: inherit from product.template
+  _inherit = ['mail.thread', 'mail.activity.mixin']
   _order = 'reference desc'
 
   reference = fields.Char(string='Reference', required=True, copy=False, readonly=True,
@@ -25,7 +26,6 @@ class Medicine(models.Model):
           'hide_ref') else f'[{rec.reference}] {rec.name}'))
 
     return records
-
 
   # TODO: Fix duplicate check
   ##############################################################################################################################
@@ -66,7 +66,10 @@ class Medicine(models.Model):
 
   def copy(self, default=None):
     default = default or {}
+
     if not default.get('name'):
       default['name'] = _('%s (Copy)', self.name)
+
     default['note'] = _('Copy from %s', self.name)
+
     return super(Medicine, self).copy(default)

@@ -4,7 +4,7 @@ from odoo import models, fields, api, _
 
 
 class CreateAppointmentReportWizard(models.TransientModel):
-  _name = 'om_hospital.create_appointment_report_wizard'
+  _name = 'om_hospital.appointment_report_wizard'
   _description = 'Create Appointment Report Wizard'
 
   patient_id = fields.Many2one(

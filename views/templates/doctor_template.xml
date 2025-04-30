@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="template_doctor">
+    <script src="https://cdn.jsdelivr.net/npm/@odoo/owl@2.7.0/dist/owl.iife.min.js"></script>
+
+    <t t-call="website.layout">
+      <div class="container">
+        <h1> Doctor #<span t-field="doctor.reference" /> Details </h1>
+
+        <div class="card" style="width: 18rem;">
+          <img t-att-src="image_data_uri(doctor.image)" class="card-img-top"
+            style="max-height:120px; max-width:120px;" alt="Doctor Image" />
+          <div class="card-body">
+            <h3 class="card-title" t-field="doctor.partner_id.name" />
+            <p class="card-text">
+              <strong>Reference:</strong>
+              <span t-field="doctor.reference" />
+              <br />
+              <strong>Age:</strong>
+              <span t-field="doctor.age" />
+              <br />
+              <strong>Gender:</strong>
+              <span t-field="doctor.gender" />
+              <br />
+              <strong>Appointments:</strong>
+              <span t-field="doctor.appointments_count" />
+            </p>
+          </div>
+        </div>
+
+        <t t-call="om_hospital.template_appointments" />
+      </div>
+    </t>
+  </template>
+</odoo>

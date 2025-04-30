@@ -15,7 +15,8 @@
             type="object" name="view_children" />
         </header>
         <sheet>
-          <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+          <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+            attrs="{'invisible': [('active', '=', True)]}" />
 
           <div class="oe_button_box" name="button_box">
             <button name="view_appointments" type="object"
@@ -36,14 +37,14 @@
           </div>
           <group>
             <group>
-              <field name="partner_id" invisible="context.get('hide_partner_id')" options="{'no_open': 1}" />
+              <field name="partner_id" invisible="context.get('hide_partner_id')" />
               <field name="age" />
               <field name="gender" invisible="context.get('hide_gender')" />
               <field name="appointments_count" />
             </group>
             <group>
               <field name="responsible_id" invisible="context.get('hide_responsible_id')" />
-              <field name="active" invisible="1"/>
+              <field name="active" invisible="1" />
             </group>
           </group>
           <notebook>
@@ -136,7 +137,7 @@
         <field name="responsible_id" optional="show" invisible="context.get('hide_responsible_id')" />
         <field name="appointments_count" optional="hide" />
         <field name="children_count" optional="hide" />
-        <field name="active" invisible="1"/>
+        <field name="active" invisible="1" />
       </tree>
     </field>
   </record>

@@ -36,9 +36,13 @@ Key Features:
         "views/patient.xml",
         "views/appointment.xml",
         "views/medicine.xml",
+        "views/reception.xml",
         "views/doctor.xml",
         "views/sale.xml",
         "views/partner.xml",
+        "views/templates/doctors_template.xml",
+        "views/templates/doctor_template.xml",
+        "views/templates/appointments_template.xml",
         "report/patient_report_template.xml",
         "report/patient_report.xml",
         "report/patient_report_xlsx.xml",
@@ -48,9 +52,6 @@ Key Features:
     ],
     'demo': [
         'demo/demo.xml',
-    ],
-    'qweb': [
-        'static/src/xml/hospital.xml',
     ],
     'assets': {
         'web.assets_backend': [

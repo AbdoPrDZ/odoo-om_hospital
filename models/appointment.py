@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+from odoo.addons.base.models.res_users import check_identity
 
 
 class Appointment(models.Model):
@@ -13,7 +14,7 @@ class Appointment(models.Model):
   reference = fields.Char(string='Reference', required=True, copy=False, readonly=True,
                           default=lambda self: _('New'))
   doctor_id = fields.Many2one(
-      'om_hospital.doctor', string='Doctor', required=True)
+      'om_hospital.doctor', string='Doctor', required=True, tracking=True, readonly=True)
   patient_id = fields.Many2one(
       'om_hospital.patient', string='Patient', required=True)
   age = fields.Integer(string='Age', related='patient_id.age', tracking=True)
@@ -45,6 +46,15 @@ class Appointment(models.Model):
           'hide_ref') else f'[{rec.reference}] {rec.patient_id.partner_id.name}'))
 
     return records
+
+  @api.model
+  def default_get(self, fields):
+    res = super().default_get(fields)
+    doctor = self.env['om_hospital.doctor'].search(
+        [('user_id', '=', self.env.user.id)], limit=1)
+    if doctor:
+      res['doctor_id'] = doctor.id
+    return res
 
   @api.constrains('amount')
   def check_amount(self):
@@ -83,6 +93,7 @@ class Appointment(models.Model):
     for rec in self:
       rec.state = 'done'
 
+  @check_identity
   def action_cancel(self):
     for rec in self:
       rec.state = 'cancel'

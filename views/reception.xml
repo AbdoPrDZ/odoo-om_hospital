@@ -1,31 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <record id="view_doctor_form" model="ir.ui.view">
-    <field name="name">om_hospital.doctor.form</field>
-    <field name="model">om_hospital.doctor</field>
+  <record id="view_reception_form" model="ir.ui.view">
+    <field name="name">om_hospital.reception.form</field>
+    <field name="model">om_hospital.reception</field>
     <field name="arch" type="xml">
       <form>
-        <header>
-          <button id="create_appointment" class="btn-primary" string="Create Appointment"
-            type="action" name="%(action_create_appointment)d"
-            context="{'default_doctor_id': id}" />
-          <button id="view_appointments" class="btn-info" string="View Appointments"
-            type="object" name="view_appointments" />
-        </header>
         <sheet>
           <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
             attrs="{'invisible': [('active', '=', True)]}" />
-
-          <div class="oe_button_box" name="button_box">
-            <button name="view_appointments" type="object"
-              class="oe_stat_button" icon="fa-calendar">
-              <div class="o_stat_info">
-                <field name="appointments_count" class="o_stat_value" />
-                <span class="o_stat_text">
-                  Appointments</span>
-              </div>
-            </button>
-          </div>
 
           <field name="image" widget="image" class="oe_avatar" />
 
@@ -39,7 +21,6 @@
               <field name="partner_id" />
               <field name="age" />
               <field name="gender" />
-              <field name="appointments_count" />
               <field name="active" invisible="1" />
             </group>
             <group>
@@ -56,11 +37,11 @@
     </field>
   </record>
 
-  <record id="view_doctor_search" model="ir.ui.view">
-    <field name="name">om_hospital.doctor.search</field>
-    <field name="model">om_hospital.doctor</field>
+  <record id="view_reception_search" model="ir.ui.view">
+    <field name="name">om_hospital.reception.search</field>
+    <field name="model">om_hospital.reception</field>
     <field name="arch" type="xml">
-      <search string="Doctors">
+      <search string="Receptions">
         <field name="partner_id" string="Partner" />
         <field name="note" string="Description" />
         <separator />
@@ -75,25 +56,24 @@
     </field>
   </record>
 
-  <record id="view_doctor_tree" model="ir.ui.view">
-    <field name="name">om_hospital.doctor.tree</field>
-    <field name="model">om_hospital.doctor</field>
+  <record id="view_reception_tree" model="ir.ui.view">
+    <field name="name">om_hospital.reception.tree</field>
+    <field name="model">om_hospital.reception</field>
     <field name="arch" type="xml">
       <tree sample="1" default_order="reference desc" multi_edit="1">
         <field name="reference" />
         <field name="partner_id" />
         <field name="age" optional="show" />
         <field name="gender" optional="show" />
-        <field name="appointments_count" optional="hide" />
         <field name="note" optional="hide" />
         <field name="active" invisible="1" />
       </tree>
     </field>
   </record>
 
-  <record id="view_doctor_kanban" model="ir.ui.view">
-    <field name="name">om_hospital.doctor.kanban</field>
-    <field name="model">om_hospital.doctor</field>
+  <record id="view_reception_kanban" model="ir.ui.view">
+    <field name="name">om_hospital.reception.kanban</field>
+    <field name="model">om_hospital.reception</field>
     <field name="arch" type="xml">
       <kanban class="o_kanban_mobile" sample="1" default_order="reference asc">
         <field name="id" />
@@ -124,16 +104,16 @@
     </field>
   </record>
 
-  <record id="action_hospital_doctor" model="ir.actions.act_window">
-    <field name="name">Doctors</field>
+  <record id="action_hospital_reception" model="ir.actions.act_window">
+    <field name="name">Receptions</field>
     <field name="type">ir.actions.act_window</field>
-    <field name="res_model">om_hospital.doctor</field>
+    <field name="res_model">om_hospital.reception</field>
     <field name="view_mode">tree,form,kanban</field>
     <field name="context">{
       'search_default_gender': 1,
       }</field>
   </record>
 
-  <menuitem id="hospital_doctor" name="Doctors" sequence="10" parent="hospital_doctor_root"
-    action="action_hospital_doctor" />
+  <menuitem id="hospital_reception" name="Receptions" sequence="10" parent="hospital_reception_root"
+    action="action_hospital_reception" />
 </odoo>

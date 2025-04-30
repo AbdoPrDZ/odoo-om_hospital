@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="template_doctors">
+    <t t-call="website.layout">
+      <div class="container">
+        <h1>Doctors List</h1>
+        <div class="table-responsive-sm">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">gender</th>
+                <th scope="col">Appointments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <t t-foreach="doctors" t-as="doctor">
+                <tr>
+                  <td>
+                    <img t-att-src="image_data_uri(doctor.image)"
+                      style="max-height:60px; max-width:60px;" class="img-thumbnail" />
+                  </td>
+                  <td scope="row">
+                    <a t-att-href="'/om_hospital/doctor/%s' % doctor.id">
+                      <span t-field="doctor.reference" />
+                    </a>
+                  </td>
+                  <td>
+                    <span t-field="doctor.partner_id.name" />
+                  </td>
+                  <td>
+                    <span t-field="doctor.age" />
+                  </td>
+                  <td>
+                    <span t-field="doctor.gender" />
+                  </td>
+                  <td>
+                    <span t-field="doctor.appointments_count" />
+                  </td>
+                </tr>
+              </t>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </t>
+  </template>
+</odoo>

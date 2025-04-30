@@ -6,7 +6,8 @@
     <field name="arch" type="xml">
       <form>
         <sheet>
-          <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+          <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+            attrs="{'invisible': [('active', '=', True)]}" />
 
           <field name="image" widget="image" class="oe_avatar" />
           <div class="oe_title">
@@ -17,11 +18,11 @@
           <group>
             <group>
               <field name="name" />
-              <field name="note" />
+              <field name="note" groups="om_hospital.group_hospital_doctor" />
             </group>
             <group>
-              <field name="usage" />
-              <field name="active" invisible="1"/>
+              <field name="usage" groups="om_hospital.group_hospital_doctor" />
+              <field name="active" invisible="1" />
             </group>
           </group>
         </sheet>
@@ -40,8 +41,8 @@
     <field name="arch" type="xml">
       <search string="medicines">
         <field name="name" string="Name" />
-        <field name="usage" string="Usage" />
-        <field name="note" string="Description" />
+        <field name="usage" string="Usage" groups="om_hospital.group_hospital_doctor" />
+        <field name="note" string="Description" groups="om_hospital.group_hospital_doctor" />
         <separator />
         <filter string="Active" name="active" domain="[('active', '=', True)]" />
         <filter string="Inactive" name="inactive" domain="[('active', '=', False)]" />
@@ -58,7 +59,7 @@
         <field name="name" />
         <field name="usage" optional="show" />
         <field name="note" optional="hide" />
-        <field name="active" invisible="1"/>
+        <field name="active" invisible="1" />
       </tree>
     </field>
   </record>
