@@ -7,11 +7,10 @@ class Medicine(models.Model):
   _name = 'om_hospital.medicine'
   _description = 'Hospital Medicine Information'
   # TODO: inherit from product.template
-  _inherit = ['mail.thread', 'mail.activity.mixin']
+  _inherit = ['om_hospital.model.mixin', 'mail.thread', 'mail.activity.mixin']
   _order = 'reference desc'
+  _sequence_id = 'om_hospital.medicine_seq'
 
-  reference = fields.Char(string='Reference', required=True, copy=False, readonly=True,
-                          default=lambda self: _('New'))
   name = fields.Char(string="Name", required=True, tracking=True)
   note = fields.Text(string='Description', tracking=True)
   usage = fields.Text(string='Usage', tracking=True)
@@ -19,6 +18,7 @@ class Medicine(models.Model):
   active = fields.Boolean(string='Active', default=True, tracking=True)
 
   def name_get(self):
+    """ Override the name_get method to display the reference and name """
     records = []
 
     for rec in self:
@@ -27,28 +27,14 @@ class Medicine(models.Model):
 
     return records
 
-  # TODO: Fix duplicate check
-  ##############################################################################################################################
-  # @api.constrains('name')
-  # def check_name(self):
-  #   founds = self.env['om_hospital.medicine'].search(
-  #       [('name', '=', self.name)])
-  #   if founds:
-  #     raise models.ValidationError(
-  #         _('This medicine "%s" name already exists.', self.name))
-
   def _validate(self, vals, skip=None):
+    """ Validate the medicine name to ensure it is unique """
     if self.env['om_hospital.medicine'].search_count([('name', '=', vals.get('name'))] + [('id', '!=', skip)] if skip else []):
       raise models.ValidationError(
           _('This medicine "%s" name already exists.', vals.get('name')))
-  ##############################################################################################################################
 
   @api.model
   def create(self, vals):
-    if vals.get('reference', ('New')) == _('New'):
-      vals['reference'] = self.env['ir.sequence'].next_by_code(
-          'om_hospital.medicine_seq') or _('New')
-
     for rec in self:
       rec._validate(vals)
 
@@ -56,10 +42,6 @@ class Medicine(models.Model):
 
   def write(self, vals):
     for rec in self:
-      if rec.reference == _('New'):
-        vals['reference'] = self.env['ir.sequence'].next_by_code(
-            'om_hospital.medicine_seq') or _('New')
-
       rec._validate(vals, rec.id)
 
       super(Medicine, rec).write(vals)

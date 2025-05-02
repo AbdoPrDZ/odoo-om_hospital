@@ -6,8 +6,7 @@
     <field name="arch" type="xml">
       <form>
         <sheet>
-          <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
-            attrs="{'invisible': [('active', '=', True)]}" />
+          <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
 
           <field name="image" widget="image" class="oe_avatar" />
 
@@ -19,8 +18,8 @@
           <group>
             <group>
               <field name="partner_id" />
-              <field name="age" />
-              <field name="gender" />
+              <!-- <field name="age" />
+              <field name="gender" /> -->
               <field name="active" invisible="1" />
             </group>
             <group>
@@ -45,13 +44,13 @@
         <field name="partner_id" string="Partner" />
         <field name="note" string="Description" />
         <separator />
-        <filter string="Male" name="male" domain="[('gender', '=', 'male')]" />
-        <filter string="Female" name="female" domain="[('gender', '=', 'female')]" />
+        <!-- <filter string="Male" name="male" domain="[('gender', '=', 'male')]" />
+        <filter string="Female" name="female" domain="[('gender', '=', 'female')]" /> -->
         <filter string="Active" name="active" domain="[('active', '=', True)]" />
         <filter string="Inactive" name="inactive" domain="[('active', '=', False)]" />
-        <group expand="1" string="Group By">
+        <!-- <group expand="1" string="Group By">
           <filter string="Gender" name="gender" context="{ 'group_by': 'gender' }" />
-        </group>
+        </group> -->
       </search>
     </field>
   </record>
@@ -63,8 +62,8 @@
       <tree sample="1" default_order="reference desc" multi_edit="1">
         <field name="reference" />
         <field name="partner_id" />
-        <field name="age" optional="show" />
-        <field name="gender" optional="show" />
+        <!-- <field name="age" optional="show" />
+        <field name="gender" optional="show" /> -->
         <field name="note" optional="hide" />
         <field name="active" invisible="1" />
       </tree>
@@ -114,6 +113,5 @@
       }</field>
   </record>
 
-  <menuitem id="hospital_reception" name="Receptions" sequence="10" parent="hospital_reception_root"
-    action="action_hospital_reception" />
+  <menuitem id="hospital_reception" name="Receptions" sequence="10" parent="hospital_reception_root" action="action_hospital_reception" />
 </odoo>

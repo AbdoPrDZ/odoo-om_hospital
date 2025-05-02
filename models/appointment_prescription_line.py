@@ -17,10 +17,12 @@ class AppointmentPrescriptionLine(models.Model):
   active = fields.Boolean(string='Active', default=True)
 
   def name_get(self):
+    """ Override the name_get method to display the medicine name and reference """
     return [(rec.id, f'[{rec.medicine_id.reference}] {rec.medicine_id.name}') for rec in self]
 
   @api.onchange('medicine_id')
   def _onchange_medicine(self):
+    """ Set the usage description based on the selected medicine if not already set """
     for rec in self:
       if not rec.usage and rec.medicine_id:
         rec.usage = rec.medicine_id.usage

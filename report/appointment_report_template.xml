@@ -8,88 +8,87 @@
 
           <t t-set="address">
             <t t-if="doc.patient_id.image">
-              <img t-att-src="image_data_uri(doc.patient_id.image)"
-                style="max-height:150px; max-width:150px;" class="img-thumbnail" />
+              <img t-att-src="image_data_uri(doc.patient_id.image)" style="max-height:150px; max-width:150px;" class="img-thumbnail" />
             </t>
-            <div t-field="doc.patient_id.partner_id"
-              t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}" />
-            Age: <span t-field="doc.age" /><br/>
-            Date: <span t-field="doc.appointment_date" /><br/>
-          </t>
+            <div t-field="doc.patient_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}" />
+            Age: <span t-field="doc.age" />
+          <br/>
+            Date: <span t-field="doc.appointment_date" />
+        <br/>
+      </t>
 
-          <div class="page">
-            <div class="oe_structure" />
-            <h2 class="mt16">
-              <span>Appointment # </span>
-              <span t-field="doc.reference" />
-            </h2>
+      <div class="page">
+        <div class="oe_structure" />
+        <h2 class="mt16">
+          <span>Appointment # </span>
+          <span t-field="doc.reference" />
+        </h2>
 
-            <div class="row mt32 mb32" id="informations">
-              <div class="col-auto col-3 mw-100 mb-2">
-                <strong>Doctor:</strong>
-                <p class="m-0" t-field="doc.doctor_id" />
-              </div>
-              <div class="col-auto col-3 mw-100 mb-2">
-                <t t-if="doc.note">
-                  <strong>Description:</strong>
-                  <p class="m-0" t-field="doc.note" />
-                </t>
-              </div>
-              <div class="col-auto col-3 mw-100 mb-2">
-                <strong>Checkup Date:</strong>
-                <p class="m-0" t-field="doc.checkup_date" />
-              </div>
-            </div>
+        <div class="row mt32 mb32" id="informations">
+          <div class="col-auto col-3 mw-100 mb-2">
+            <strong>Doctor:</strong>
+            <p class="m-0" t-field="doc.doctor_id" />
+          </div>
+          <div class="col-auto col-3 mw-100 mb-2">
+            <t t-if="doc.note">
+              <strong>Description:</strong>
+              <p class="m-0" t-field="doc.note" />
+            </t>
+          </div>
+          <div class="col-auto col-3 mw-100 mb-2">
+            <strong>Checkup Date:</strong>
+            <p class="m-0" t-field="doc.checkup_date" />
+          </div>
+        </div>
 
-            <table class="table table-sm o_main_table">
-              <thead style="display: table-row-group">
-                <tr>
-                  <th name="th_reference" class="text-left">Reference</th>
-                  <th name="th_medicine_id" class="text-left">Medicine</th>
-                  <th name="th_usage" class="text-left">Usage</th>
-                  <th name="th_quantity" class="text-left">Quantity</th>
+        <table class="table table-sm o_main_table">
+          <thead style="display: table-row-group">
+            <tr>
+              <th name="th_reference" class="text-left">Reference</th>
+              <th name="th_medicine_id" class="text-left">Medicine</th>
+              <th name="th_usage" class="text-left">Usage</th>
+              <th name="th_quantity" class="text-left">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <t t-foreach="doc.prescription_lines_ids" t-as="line">
+              <tr>
+                <td name="th_reference">
+                  <span t-field="line.medicine_id.reference" />
+                </td>
+                <td name="th_medicine_id">
+                  <span t-field="line.medicine_id.name" />
+                </td>
+                <td name="th_usage">
+                  <span t-field="line.usage" />
+                </td>
+                <td name="th_quantity">
+                  <span t-field="line.quantity" />
+                </td>
+              </tr>
+            </t>
+          </tbody>
+        </table>
+
+        <div class="clearfix" name="so_total_summary">
+          <div id="total" class="row" name="total">
+            <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ml-auto">
+              <table class="table table-sm">
+                <tr class="border-black o_total">
+                  <td name="td_amount_total_label">
+                    <strong>Total</strong>
+                  </td>
+                  <td name="td_amount" class="text-right">
+                    <span t-field="doc.amount" />
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                <t t-foreach="doc.prescription_lines_ids" t-as="line">
-                  <tr>
-                    <td name="th_reference">
-                      <span t-field="line.medicine_id.reference" />
-                    </td>
-                    <td name="th_medicine_id">
-                      <span t-field="line.medicine_id.name" />
-                    </td>
-                    <td name="th_usage">
-                      <span t-field="line.usage" />
-                    </td>
-                    <td name="th_quantity">
-                      <span t-field="line.quantity" />
-                    </td>
-                  </tr>
-                </t>
-              </tbody>
-            </table>
-
-            <div class="clearfix" name="so_total_summary">
-              <div id="total" class="row" name="total">
-                <div
-                  t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ml-auto">
-                  <table class="table table-sm">
-                    <tr class="border-black o_total">
-                      <td name="td_amount_total_label">
-                        <strong>Total</strong>
-                      </td>
-                      <td name="td_amount" class="text-right">
-                        <span t-field="doc.amount" />
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
+              </table>
             </div>
           </div>
-        </t>
-      </t>
+        </div>
+      </div>
     </t>
-  </template>
+  </t>
+</t>
+</template>
 </odoo>

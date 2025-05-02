@@ -5,11 +5,11 @@
 
     <t t-call="website.layout">
       <div class="container">
-        <h1> Doctor #<span t-field="doctor.reference" /> Details </h1>
+        <h1> Doctor #<span t-field="doctor.reference" />
+ Details </h1>
 
         <div class="card" style="width: 18rem;">
-          <img t-att-src="image_data_uri(doctor.image)" class="card-img-top"
-            style="max-height:120px; max-width:120px;" alt="Doctor Image" />
+          <img t-att-src="image_data_uri(doctor.image)" class="card-img-top" style="max-height:120px; max-width:120px;" alt="Doctor Image" />
           <div class="card-body">
             <h3 class="card-title" t-field="doctor.partner_id.name" />
             <p class="card-text">

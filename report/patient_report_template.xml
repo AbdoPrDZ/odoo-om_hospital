@@ -8,11 +8,9 @@
 
           <t t-set="address">
             <t t-if="doc.image">
-              <img t-att-src="image_data_uri(doc.image)"
-                style="max-height:150px; max-width:150px;" class="img-thumbnail" />
+              <img t-att-src="image_data_uri(doc.image)" style="max-height:150px; max-width:150px;" class="img-thumbnail" />
             </t>
-            <div t-field="doc.partner_id"
-              t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}" />
+            <div t-field="doc.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}" />
           </t>
 
           <div class="page">
@@ -80,8 +78,7 @@
 
             <div class="clearfix" name="so_total_summary">
               <div id="total" class="row" name="total">
-                <div
-                  t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ml-auto">
+                <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ml-auto">
                   <table class="table table-sm">
                     <tr class="border-black o_total">
                       <td name="td_amount_total_label">

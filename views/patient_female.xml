@@ -13,9 +13,5 @@
       }</field>
   </record>
 
-  <menuitem id="hospital_female"
-    name="Female patients"
-    sequence="30"
-    parent="hospital_patient_root"
-    action="action_hospital_patient_female" />
+  <menuitem id="hospital_female" name="Female patients" sequence="30" parent="hospital_patient_root" action="action_hospital_patient_female" />
 </odoo>

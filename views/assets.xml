@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="assets_backend" name="account assets" inherit_id="web.assets_backend">
+    <xpath expr="." position="inside">
+      <script type="text/javascript" src="/om_hospital/static/src/js/work_days_field.js"></script>
+      <link rel="stylesheet" href="/om_hospital/static/src/css/work_days_field.css"/>
+    </xpath>
+  </template>
+  
+</odoo>

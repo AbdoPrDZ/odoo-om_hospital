@@ -6,21 +6,15 @@
     <field name="arch" type="xml">
       <form>
         <header>
-          <button id="create_appointment" class="btn-primary" string="Create Appointment"
-            type="action" name="%(action_create_appointment)d"
-            context="{'default_patient_id': id, 'hide_patient_id': 1}" />
-          <button id="view_appointments" class="btn-info" string="View Appointments"
-            type="object" name="view_appointments" />
-          <button id="view_children" class="btn-info" string="View Children"
-            type="object" name="view_children" />
+          <button id="create_appointment" class="btn-primary" string="Create Appointment" type="action" name="%(action_create_appointment)d" context="{'default_patient_id': id, 'hide_patient_id': 1}" />
+          <button id="view_appointments" class="btn-info" string="View Appointments" type="object" name="view_appointments" />
+          <button id="view_children" class="btn-info" string="View Children" type="object" name="view_children" />
         </header>
         <sheet>
-          <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
-            attrs="{'invisible': [('active', '=', True)]}" />
+          <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
 
           <div class="oe_button_box" name="button_box">
-            <button name="view_appointments" type="object"
-              class="oe_stat_button" icon="fa-calendar">
+            <button name="view_appointments" type="object" class="oe_stat_button" icon="fa-calendar">
               <div class="o_stat_info">
                 <field name="appointments_count" class="o_stat_value" />
                 <span class="o_stat_text">
@@ -65,9 +59,9 @@
                 </tree>
               </field>
             </page>
-            <!-- <page string="Children" name="children">
+            <page string="Children" name="children">
               <field name="children_ids" />
-            </page> -->
+            </page>
           </notebook>
         </sheet>
         <div class="oe_chatter">
@@ -85,8 +79,7 @@
     <field name="arch" type="xml">
       <search string="Patients">
         <field name="partner_id" string="Partner" />
-        <field name="responsible_id" string="Responsible"
-          invisible="context.get('hide_responsible_id')" />
+        <field name="responsible_id" string="Responsible" invisible="context.get('hide_responsible_id')" />
         <field name="note" string="Description" />
         <separator />
         <filter string="Male" name="male" domain="[('gender', '=', 'male')]" />
@@ -100,8 +93,7 @@
         <filter string="Inactive" name="inactive" domain="[('active', '=', False)]" />
         <group expand="1" string="Group By">
           <filter string="Gender" name="gender" context="{ 'group_by': 'gender' }" />
-          <filter string="Responsible" name="responsible" context="{ 'group_by': 'responsible_id' }"
-            invisible="context.get('hide_responsible_id')" />
+          <filter string="Responsible" name="responsible" context="{ 'group_by': 'responsible_id' }" invisible="context.get('hide_responsible_id')" />
           <filter string="Partner" name="partner" context="{ 'group_by': 'partner_id' }" />
         </group>
       </search>
@@ -168,7 +160,8 @@
                   <li> Gender: <field name="gender" />
                   </li>
                   <t t-if="record.responsible_id.raw_value">
-                    <li>Responsible: <span t-field="record.responsible_id" /></li>
+                    <li>Responsible: <span t-field="record.responsible_id" />
+                    </li>
                   </t>
                 </ul>
               </div>
@@ -190,15 +183,7 @@
       }</field>
   </record>
 
-  <menuitem id="hospital_patient"
-    name="Patients"
-    sequence="10"
-    parent="hospital_patient_root"
-    action="action_hospital_patient" />
+  <menuitem id="hospital_patient" name="Patients" sequence="10" parent="hospital_patient_root" action="action_hospital_patient" />
 
-  <menuitem id="sale_order_patient"
-    name="Patients"
-    sequence="3"
-    parent="sale.sale_order_menu"
-    action="action_hospital_patient" />
+  <menuitem id="sale_order_patient" name="Patients" sequence="3" parent="sale.sale_order_menu" action="action_hospital_patient" />
 </odoo>

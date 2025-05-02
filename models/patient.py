@@ -6,22 +6,20 @@ from odoo import models, fields, api, _
 class Patient(models.Model):
   _name = 'om_hospital.patient'
   _description = 'Hospital Patient Information'
-  _inherit = ['mail.thread', 'mail.activity.mixin', 'om_hospital.model.mixin']
+  _inherit = ['om_hospital.model.mixin', 'mail.thread', 'mail.activity.mixin']
   _rec_name = 'partner_id'
   _order = 'reference desc'
   _sequence_id = 'om_hospital.patient_seq'
 
-  reference = fields.Char(string='Reference', required=True, copy=False, readonly=True,
-                          default=lambda self: _('New'))
   partner_id = fields.Many2one(
       'res.partner', string='Patient', required=True)
   responsible_id = fields.Many2one(
       'res.partner', string='Responsible')
-  age = fields.Integer(string='Age', required=True, tracking=True)
+  age = fields.Integer(string='Age', related='partner_id.age', tracking=True)
   gender = fields.Selection(string='Gender', selection=[
       ('male', 'Male'),
       ('female', 'Female'),
-  ], required=True, default='male', tracking=True)
+  ], related='partner_id.gender', tracking=True)
   note = fields.Text(string='Description', tracking=True)
   appointments_ids = fields.One2many(
       'om_hospital.appointment', 'patient_id', string="Appointments"
@@ -30,9 +28,6 @@ class Patient(models.Model):
       string="Appointments Count", compute="_compute_appointments_count")
   image = fields.Binary(string="Patient Image",
                         related='partner_id.image_1920', readonly=True)
-  # children_ids = fields.One2many(
-  #     'res.partner', 'responsible_id', string="Children"
-  # )
   children_count = fields.Integer(
       string="Children Count", compute="_compute_children_count")
   active = fields.Boolean(string='Active', default=True, tracking=True)
@@ -41,12 +36,11 @@ class Patient(models.Model):
     if 'partner_id' in vals and 'responsible_id' in vals and vals['partner_id'] == vals['responsible_id']:
       raise models.ValidationError(
           'The patient and responsible cannot be the same person.')
-    if 'age' in vals and vals['age'] < 0:
-      raise models.ValidationError(
-          'Age cannot be negative. Please enter a valid age.')
-    if 'age' in vals and vals['age'] <= 13 and not (vals.get('responsible_id') or self.responsible_id):
-      raise models.ValidationError(
-          'You must select a responsible for patients under 13 years old.')
+    if 'partner_id' in vals and vals['partner_id']:
+      partner = self.env['res.partner'].browse(vals['partner_id'])
+      if partner.age and partner.age < 13 and 'responsible_id' not in vals:
+        raise models.ValidationError(
+            'You must select a responsible for patients under 13 years old.')
     return vals
 
   def name_get(self):
@@ -60,20 +54,12 @@ class Patient(models.Model):
 
   @api.model
   def create(self, vals):
-    if vals.get('reference', ('New')) == _('New'):
-      vals['reference'] = self.env['ir.sequence'].next_by_code(
-          'om_hospital.patient_seq') or _('New')
-
     vals = self._validate(vals)
 
     return super(Patient, self).create(vals)
 
   def write(self, vals):
     for rec in self:
-      if rec.reference == _('New'):
-        vals['reference'] = self.env['ir.sequence'].next_by_code(
-            'om_hospital.patient_seq') or _('New')
-
       vals = rec._validate(vals)
 
       super(Patient, rec).write(vals)

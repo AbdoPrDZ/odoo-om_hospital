@@ -6,27 +6,16 @@
     <field name="arch" type="xml">
       <form>
         <header>
-          <button id="button_confirm" class="btn-primary" string="Confirm"
-            type="object" name="action_confirm" states="draft"
-            confirm="Are you sure you want to confirm this appointment?" />
-          <button id="button_done" class="btn-success" string="Mark as done"
-            type="object" name="action_done" states="confirm"
-            confirm="Are you sure you want to mark this appointment as done?" />
-          <button id="button_cancel" class="btn-danger" string="Cancel"
-            type="object" name="action_cancel" states="draft,confirm,done"
-            confirm="Are you sure you want to cancel this appointment" />
-          <button id="button_restore" class="btn-default" string="Restore as draft"
-            type="object" name="action_restore" states="cancel"
-            confirm="Are you sure you want to restore this appointment" />
-          <button id="button_url" class="btn-default" string="Open URL"
-            type="object" name="action_url" />
+          <button id="button_confirm" class="btn-primary" string="Confirm" type="object" name="action_confirm" states="draft" confirm="Are you sure you want to confirm this appointment?" />
+          <button id="button_done" class="btn-success" string="Mark as done" type="object" name="action_done" states="confirm" confirm="Are you sure you want to mark this appointment as done?" />
+          <button id="button_cancel" class="btn-danger" string="Cancel" type="object" name="action_cancel" states="draft,confirm,done" confirm="Are you sure you want to cancel this appointment" />
+          <button id="button_restore" class="btn-default" string="Restore as draft" type="object" name="action_restore" states="cancel" confirm="Are you sure you want to restore this appointment" />
+          <button id="button_url" class="btn-default" string="Open URL" type="object" name="action_url" />
           <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done" />
         </header>
         <sheet>
-          <widget name="web_ribbon" title="Draft" bg_color="bg-warning"
-            attrs="{'invisible': [('state', '!=', 'draft')]}" />
-          <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
-            attrs="{'invisible': [('active', '=', True)]}" />
+          <widget name="web_ribbon" title="Draft" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'draft')]}" />
+          <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
 
           <div class="oe_title">
             <h1>
@@ -35,10 +24,8 @@
           </div>
           <group>
             <group>
-              <field name="patient_id" invisible="context.get('hide_patient_id')"
-                options="{'no_create': 1, 'no_create_edit': 1}" />
-              <field name="doctor_id" invisible="context.get('hide_doctor_id')"
-                options="{'no_create': 1, 'no_create_edit': 1}" />
+              <field name="patient_id" invisible="context.get('hide_patient_id')" options="{'no_create': 1, 'no_create_edit': 1}" />
+              <field name="doctor_id" invisible="context.get('hide_doctor_id')" options="{'no_create': 1, 'no_create_edit': 1}" />
               <field name="age" readonly="1" />
               <field name="gender" readonly="1" />
             </group>
@@ -97,10 +84,8 @@
         <filter string="Active" name="active" domain="[('active', '=', True)]" />
         <filter string="Inactive" name="inactive" domain="[('active', '=', False)]" />
         <group expand="1" string="Group By">
-          <filter string="Patient" name="patient" context="{ 'group_by': 'patient_id' }"
-            invisible="context.get('hide_patient_id')" />
-          <filter string="Doctor" name="doctor" context="{ 'group_by': 'doctor_id' }"
-            invisible="context.get('hide_doctor_id')" />
+          <filter string="Patient" name="patient" context="{ 'group_by': 'patient_id' }" invisible="context.get('hide_patient_id')" />
+          <filter string="Doctor" name="doctor" context="{ 'group_by': 'doctor_id' }" invisible="context.get('hide_doctor_id')" />
           <filter string="Date" name="appointment_date" context="{ 'group_by': 'appointment_date' }" />
         </group>
         <searchpanel>
@@ -126,9 +111,7 @@
     <field name="arch" type="xml">
       <tree sample="1" multi_edit="1">
         <header>
-          <button class="btn-success" string="Mark as done"
-            type="object" name="action_done"
-            confirm="Are you sure you want to mark this appointment as done?" />
+          <button class="btn-success" string="Mark as done" type="object" name="action_done" confirm="Are you sure you want to mark this appointment as done?" />
         </header>
         <field name="reference" />
         <field name="patient_id" invisible="context.get('hide_patient_id')" />
@@ -192,9 +175,5 @@
       }</field>
   </record>
 
-  <menuitem id="hospital_appointment"
-    name="Appointments"
-    sequence="10"
-    parent="hospital_appointment_root"
-    action="action_hospital_appointment" />
+  <menuitem id="hospital_appointment" name="Appointments" sequence="10" parent="hospital_appointment_root" action="action_hospital_appointment" />
 </odoo>

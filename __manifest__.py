@@ -43,6 +43,7 @@ Key Features:
         "views/templates/doctors_template.xml",
         "views/templates/doctor_template.xml",
         "views/templates/appointments_template.xml",
+        "views/assets.xml",
         "report/patient_report_template.xml",
         "report/patient_report.xml",
         "report/patient_report_xlsx.xml",
@@ -53,12 +54,9 @@ Key Features:
     'demo': [
         'demo/demo.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-        ],
-        'web.assets_qweb': [
-        ],
-    },
+    'qweb': [
+        'static/src/xml/work_days_field.xml',
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,

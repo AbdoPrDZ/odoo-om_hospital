@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="WorkDaysWidget">
+    <div class="btn-group o_field_work_days" role="group">
+      <button class="btn btn-secondary o_day" data-day="sat">Saturday</button>
+      <button class="btn btn-secondary o_day" data-day="sun">Sunday</button>
+      <button class="btn btn-secondary o_day" data-day="mon">Monday</button>
+      <button class="btn btn-secondary o_day" data-day="tue">Tuesday</button>
+      <button class="btn btn-secondary o_day" data-day="wed">Wednesday</button>
+      <button class="btn btn-secondary o_day" data-day="thu">Thursday</button>
+      <button class="btn btn-secondary o_day" data-day="fri">Friday</button>
+    </div>
+  </t>
+</templates>

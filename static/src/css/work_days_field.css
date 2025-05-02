@@ -1,0 +1,30 @@
+/* .o_field_work_days {
+  list-style: none;
+  padding: 5px;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+.o_field_work_days li {
+  display: inline-block;
+  width: 14.28571428571429%;
+  text-align: center;
+  padding: 5px 0;
+  border: 1px solid #ccc;
+}
+.o_field_work_days li.o_day {
+  background-color: #f9f9f9;
+}
+.o_field_work_days li.o_day:hover {
+  background-color: #e0e0e0;
+}
+.o_field_work_days li.o_day.o_selected {
+  background-color: #007bff;
+  color: white;
+}
+.o_field_work_days li.o_day.o_selected:hover {
+  background-color: #0056b3;
+} */

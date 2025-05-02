@@ -7,9 +7,9 @@ class Product(models.Model):
   _inherit = 'product.template'
 
   type = fields.Selection(selection_add=[
-      ('test', 'Test'), ('service',)
+      ('medicine', 'Medicine'), ('service',)
   ], tracking=True, ondelete={
-      'test': 'set default',
+      'medicine': 'set default',
       # 'test': 'set null',
       # 'test': 'cascade',
   })

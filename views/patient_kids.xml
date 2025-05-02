@@ -14,9 +14,5 @@
       }</field>
   </record>
 
-  <menuitem id="hospital_kids"
-    name="Kids"
-    sequence="40"
-    parent="hospital_patient_root"
-    action="action_hospital_patient_kids" />
+  <menuitem id="hospital_kids" name="Kids" sequence="40" parent="hospital_patient_root" action="action_hospital_patient_kids" />
 </odoo>

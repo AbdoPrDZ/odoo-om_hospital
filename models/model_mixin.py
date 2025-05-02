@@ -18,7 +18,7 @@ class ModelMixin(models.AbstractModel):
 
   @api.model
   def create(self, vals):
-    if vals.get('reference', ('New')) == _('New'):
+    if vals.get('reference', _('New')) == _('New'):
       vals['reference'] = self.env['ir.sequence'].next_by_code(
           self.get_sequence_id()) or _('New')
 
