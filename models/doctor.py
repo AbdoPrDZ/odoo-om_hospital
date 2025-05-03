@@ -19,7 +19,7 @@ class Doctor(models.Model):
   gender = fields.Selection(string='Gender', selection=[
       ('male', 'Male'),
       ('female', 'Female'),
-  ], related='partner_id.gender', tracking=True)
+  ], related='partner_id.gender', store=True, tracking=True)
   note = fields.Text(string='Description', tracking=True)
   appointments_count = fields.Integer(
       string="Appointments Count", compute="_compute_appointments_count")

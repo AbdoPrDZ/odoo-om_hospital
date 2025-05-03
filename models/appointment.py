@@ -49,7 +49,7 @@ class Appointment(models.Model):
     """ Compute the age of the patient """
     for rec in self:
       rec.age = rec.patient_id.age if rec.patient_id else 0
-    
+
   @api.depends('patient_id')
   def _compute_gender(self):
     """ Compute the gender of the patient """
@@ -58,12 +58,12 @@ class Appointment(models.Model):
 
   def _current_user_doctor(self):
     """ Get the current user's doctor record """
-    
+
     doctor = False
     if self.env.user.has_group('om_hospital.group_hospital_doctor'):
       doctor = self.env['om_hospital.doctor'].search(
           [('user_id', '=', self.env.user.id)], limit=1)
-    
+
     return doctor
 
   @api.model
@@ -74,7 +74,7 @@ class Appointment(models.Model):
     doctor = self._current_user_doctor()
     if doctor:
       res['doctor_id'] = doctor.id
-    
+
     return res
 
   @api.depends('doctor_id')
@@ -90,14 +90,14 @@ class Appointment(models.Model):
   def check_amount(self):
     """ Check if the amount is greater than 0 """
     for rec in self:
-      if rec.amount <= 0:
+      if rec.amount <= 0 and rec.state != 'draft':
         raise models.ValidationError('Amount must be greater then 0.')
 
   def only_doctor(self):
     """ Check if the current user is a doctor and raise an error if not """
     if not self._current_user_doctor():
       raise models.ValidationError(
-          'You can\'t modify this appointment.')
+          'Only Doctors can do this action.')
 
   @api.constrains('prescription_lines_ids')
   def check_prescription_lines(self):
@@ -113,12 +113,17 @@ class Appointment(models.Model):
   @api.constrains('checkup_date')
   def check_checkup_date(self):
     """ Check if the checkup date is greater than the current date and allow only doctors to modify it """
-    self.only_doctor()
 
     for rec in self:
-      if rec.checkup_date and rec.checkup_date < fields.Datetime.now():
-        raise models.ValidationError(
-            'Checkup date must be greater than current date.')
+      if rec.checkup_date:
+        self.only_doctor()
+        if rec.checkup_date < fields.Datetime.now():
+          raise models.ValidationError(
+              'Checkup date must be greater than current date.')
+        if rec.state == 'draft':
+          rec.state = 'done'
+      else:
+        rec.state = 'draft'
 
   def unlink(self):
     """ Override the unlink method to check the state before deleting """
@@ -138,6 +143,8 @@ class Appointment(models.Model):
     self.only_doctor()
     for rec in self:
       rec.state = 'done'
+      if not rec.checkup_date:
+        rec.checkup_date = fields.Datetime.now()
 
   @check_identity
   def action_cancel(self):

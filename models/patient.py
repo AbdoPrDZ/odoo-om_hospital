@@ -19,7 +19,7 @@ class Patient(models.Model):
   gender = fields.Selection(string='Gender', selection=[
       ('male', 'Male'),
       ('female', 'Female'),
-  ], related='partner_id.gender', tracking=True)
+  ], related='partner_id.gender', store=True, tracking=True)
   note = fields.Text(string='Description', tracking=True)
   appointments_ids = fields.One2many(
       'om_hospital.appointment', 'patient_id', string="Appointments"

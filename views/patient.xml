@@ -59,9 +59,6 @@
                 </tree>
               </field>
             </page>
-            <page string="Children" name="children">
-              <field name="children_ids" />
-            </page>
           </notebook>
         </sheet>
         <div class="oe_chatter">
