@@ -591,8 +591,12 @@
   ```
 
 
+# Tips
 
-<!-- TODO: -->
-# TO Learn
+## Create translations
 
-- [XML RPC](https://www.youtube.com/playlist?list=PLqRRLx0cl0hpaeRhYeNEk7xQgOxv16VF-)
+- Create i18n folder.
+- Execute this command:
+  ```bash
+  $ python odoo-bin --i18n-export=custom-addons/my_module/i18n/my_module.po --modules=my_module -d odoo
+  ```
